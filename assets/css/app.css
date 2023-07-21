@@ -1,0 +1,10 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+.header-title{
+    font-size: 3em;
+    font-weight: 600;
+    letter-spacing: 4px;
+}
