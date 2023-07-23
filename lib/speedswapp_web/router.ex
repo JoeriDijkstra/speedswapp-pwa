@@ -20,7 +20,7 @@ defmodule SpeedswappWeb.Router do
   scope "/", SpeedswappWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
@@ -61,6 +61,7 @@ defmodule SpeedswappWeb.Router do
       on_mount: [{SpeedswappWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/", FeedLive
     end
   end
 
