@@ -85,6 +85,7 @@ defmodule SpeedswappWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import SpeedswappWeb.CoreComponents
+      import SpeedswappWeb.NavComponents
       import SpeedswappWeb.Gettext
 
       # Shortcut for generating JS commands

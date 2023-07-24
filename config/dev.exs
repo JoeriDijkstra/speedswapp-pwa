@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :speedswapp, Speedswapp.Repo,
-  username: "root",
+  username: "postgres",
   password: "password",
   hostname: "localhost",
   database: "speedswapp_dev",

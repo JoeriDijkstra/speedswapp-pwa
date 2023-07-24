@@ -8,3 +8,12 @@
     font-weight: 600;
     letter-spacing: 4px;
 }
+
+.nav--hidden{
+    transform: translateY(-60px);
+    transition: transform 0.8s ease-out;
+}
+
+.nav{
+    transition: transform 0.2s ease-in;
+}
