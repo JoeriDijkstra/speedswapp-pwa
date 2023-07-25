@@ -86,6 +86,7 @@ defmodule SpeedswappWeb do
       # Core UI components and translation
       import SpeedswappWeb.CoreComponents
       import SpeedswappWeb.NavComponents
+      import SpeedswappWeb.CustomComponents
       import SpeedswappWeb.Gettext
 
       # Shortcut for generating JS commands

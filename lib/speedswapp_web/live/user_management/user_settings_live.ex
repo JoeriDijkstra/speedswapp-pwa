@@ -10,8 +10,9 @@ defmodule SpeedswappWeb.UserSettingsLive do
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
-    <div class="space-y-12 divide-y">
-      <div>
+    <div class="space-y-12 divide-y mb-20">
+      <div class="px-8 py-8 bg-white rounded-lg mt-8">
+        <h2 class="text-xl font-bold">Update email</h2>
         <.simple_form
           for={@email_form}
           id="email_form"
@@ -33,7 +34,8 @@ defmodule SpeedswappWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-      <div>
+      <div class="px-8 py-8 bg-white rounded mt-4">
+        <h2 class="text-xl font-bold">Update password</h2>
         <.simple_form
           for={@password_form}
           id="password_form"

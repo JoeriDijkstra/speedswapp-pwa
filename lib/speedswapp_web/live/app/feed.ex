@@ -3,14 +3,9 @@ defmodule SpeedswappWeb.FeedLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Feed
-        <:subtitle>
-          This is your feed!
-        </:subtitle>
-      </.header>
-      </div>
+    <div class="max-w-sm mb-20">
+      <.feed />
+    </div>
     """
   end
 end

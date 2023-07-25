@@ -13,7 +13,7 @@ defmodule SpeedswappWeb.NavComponents do
         <.bottom_nav_button navigate={"/"} icon="hero-user-group-solid" />
         <.bottom_nav_special navigate={"/"} icon="hero-plus-solid" />
         <.bottom_nav_button navigate={"/"} icon="hero-magnifying-glass-solid" />
-        <.bottom_nav_button navigate={"/"} icon="hero-user-solid" />
+        <.bottom_nav_button navigate={"/users/settings"} icon="hero-user-solid" />
       </div>
     </div>
     """
