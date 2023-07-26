@@ -3,14 +3,12 @@ defmodule SpeedswappWeb.CustomComponents do
 
   use Phoenix.Component
 
-  import SpeedswappWeb.CoreComponents
-
   attr :title, :any, required: true
   slot :inner_block, doc: "Content of the feed item"
 
   def feed_item(assigns) do
     ~H"""
-    <article class="max-w-sm bg-white rounded-lg overflow-hidden my-4">
+    <article class="max-w-full bg-white rounded-lg overflow-hidden my-4">
       <div class="px-6 py-4">
         <h2 class="font-bold text-xl mb-2"><%= @title %></h2>
         <div class="text-gray-700 text-base">
@@ -38,8 +36,10 @@ defmodule SpeedswappWeb.CustomComponents do
       "Final image"
     ]
 
+    assigns = assign(assigns, :titles, titles)
+
     ~H"""
-    <%= for title <- titles do %>
+    <%= for title <- @titles do %>
       <.feed_item title={title}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus vestibulum velit sed gravida. Proin eu libero nisl. Aliquam erat volutpat. Praesent hendrerit ultrices dignissim.
       </.feed_item>

@@ -3,7 +3,7 @@ defmodule SpeedswappWeb.FeedLive do
 
   def render(assigns) do
     ~H"""
-    <div class="max-w-sm mb-20">
+    <div class="mb-20 max-w-full">
       <.feed />
     </div>
     """

@@ -5,10 +5,11 @@ defmodule SpeedswappWeb.NavComponents do
 
   import SpeedswappWeb.CoreComponents
 
+  @spec bottom_nav(any) :: Phoenix.LiveView.Rendered.t()
   def bottom_nav(assigns) do
     ~H"""
-    <div class="fixed bottom-0 z-50 w-full h-12 bg-zinc-900">
-      <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
+    <div class="fixed bottom-0 z-50 w-full h-16 bg-zinc-900 lg:h-12">
+      <div class="grid h-3/4 lg:h-full max-w-lg grid-cols-5 mx-auto">
         <.bottom_nav_button navigate={"/"} icon="hero-home-solid" />
         <.bottom_nav_button navigate={"/"} icon="hero-user-group-solid" />
         <.bottom_nav_special navigate={"/"} icon="hero-plus-solid" />
@@ -42,7 +43,7 @@ defmodule SpeedswappWeb.NavComponents do
   def bottom_nav_special(assigns) do
     ~H"""
     <.link href={@navigate} class="inline-flex flex-col text-2xl items-center justify-center px-5 hover:bg-blue-900 group bg-blue-700 rounded-full my-1 mx-3">
-      <.icon name={@icon} class="h-8 w-8 text-white" />
+      <.icon name={@icon} class="h-8 w-8 text-white font-bold" />
     </.link>
     """
   end

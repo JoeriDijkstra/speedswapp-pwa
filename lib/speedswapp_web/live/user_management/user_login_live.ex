@@ -3,7 +3,7 @@ defmodule SpeedswappWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="mx-auto max-w-sm px-8 py-8 bg-white rounded-lg mt-8">
       <.header class="text-center">
         Sign in to account
         <:subtitle>

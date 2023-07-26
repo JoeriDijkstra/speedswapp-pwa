@@ -1,0 +1,22 @@
+{
+    "name": "Speedswapp",
+    "short_name": "Speedswapp",
+    "start_url": "/",
+    "context": "/",
+    "display": "standalone",
+    "background-color": "#18181b",
+    "theme_color": "black",
+    "description": "Experience Speedswapp's PWA, a dynamic and engaging web app that connects you to a vibrant global community of car enthusiasts, anytime, anywhere.",
+    "icons": [
+        {
+            "src": "/images/icons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

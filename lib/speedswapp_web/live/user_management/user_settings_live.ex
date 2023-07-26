@@ -34,7 +34,7 @@ defmodule SpeedswappWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-      <div class="px-8 py-8 bg-white rounded mt-4">
+      <div class="px-8 py-8 bg-white rounded-lg mt-4">
         <h2 class="text-xl font-bold">Update password</h2>
         <.simple_form
           for={@password_form}
@@ -70,6 +70,10 @@ defmodule SpeedswappWeb.UserSettingsLive do
             <.button phx-disable-with="Changing...">Change Password</.button>
           </:actions>
         </.simple_form>
+      </div>
+      <div class="px-8 py-8 bg-white rounded-lg mt-4">
+        <h2 class="text-xl font-bold">Logout</h2>
+        <.link href="/users/log_out" method="DELETE">Logout</.link>
       </div>
     </div>
     """
