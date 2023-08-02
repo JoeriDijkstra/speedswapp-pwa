@@ -6,7 +6,7 @@ defmodule SpeedswappWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="mx-auto max-w-sm px-8 py-8 bg-white rounded-lg mt-8">
       <.header class="text-center">
         Register for an account
         <:subtitle>
@@ -33,6 +33,7 @@ defmodule SpeedswappWeb.UserRegistrationLive do
 
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:code]} type="password" label="Registration Code" required />
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
@@ -67,6 +68,10 @@ defmodule SpeedswappWeb.UserRegistrationLive do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}
+
+      {:error, :code_not_accepted} ->
+        info = "Oh, no! Your registration hit a speed bump. The code you've entered isn't valid. Please double-check and try again."
+        {:noreply, socket |> put_flash(:error, info)}
     end
   end
 

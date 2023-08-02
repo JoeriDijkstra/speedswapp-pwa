@@ -75,9 +75,19 @@ defmodule Speedswapp.Accounts do
 
   """
   def register_user(attrs) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
+    accepted_codes = [
+      "67552300",
+      "36804855",
+      "82066518"
+    ]
+
+    if(Enum.member?(accepted_codes, attrs["code"])) do
+      %User{}
+      |> User.registration_changeset(attrs)
+      |> Repo.insert()
+    else
+      {:error, :code_not_accepted}
+    end
   end
 
   @doc """
