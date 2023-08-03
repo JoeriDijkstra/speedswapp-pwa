@@ -19,22 +19,20 @@
 <%= if @current_user do %>
   <.bottom_nav />
 <% end %>
-<script>
-  // Javascript directly in app
 
-  // Enable hidden navbar
-  {
-    const nav = document.querySelector(".nav");
-    let lastScrollY = window.scrollY;
-
-    window.addEventListener("scroll", () => {
-      if (lastScrollY < window.scrollY && window.scrollY > 0) {
-        nav.classList.add("nav--hidden")
-      } else {
-        nav.classList.remove("nav--hidden")
-      }
-
-      lastScrollY = window.scrollY;
-    });
-  }
-</script>
+<div class="show-safari hidden grid h-screen place-items-center justify-center" id="pwa-alert">
+  <div class="w-full bottom-6 max-w-xs fixed mx-auto p-6 text-white bg-zinc-900 rounded-lg flex z-50 shadow">
+    <div class="flex-auto">
+      <h1 class="text-lg text-gray-400">
+        Install application
+      </h1>
+      <p class="mt-1">
+        Tap <.icon name="hero-arrow-up-on-square" class="h-6 w-6 text-sky-400 -translate-y-1" /> 
+        Then "Add to Home Screen"
+      </p>
+    </div>
+    <div class="flex-1" id="pwa-dismiss">
+      <.icon name="hero-x-mark-mini" class="h-6 w-6 text-gray-600" />
+    </div>
+  </div>
+</div>
