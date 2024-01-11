@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Speedswapp">
-    <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title>
-      <%= assigns[:page_title] || "Speedswapp" %>
-    </.live_title>
-    <link phx-track-static rel="manifest" href="/manifest.json" />
-    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
 
-    <!-- Icons-->
-    <link rel="apple-touch-icon" sizes="152x152" href={~p"/assets/images/icons/apple/speedswapp_logo_152x152.png"}>
-    <link rel="apple-touch-icon" sizes="180x180" href={~p"/assets/images/icons/apple/speedswapp_logo_180x180.png"}>
-    <link rel="apple-touch-icon" href={~p"/assets/images/icons/apple/speedswapp_logo.png"}>
-    <link rel="apple-touch-startup-image" href={~p"/assets/images/icons/speedswapp_splash.png"} />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Speedswapp">
+  <meta name="csrf-token" content={get_csrf_token()} />
+  <.live_title>
+    <%= assigns[:page_title] || "Speedswapp" %>
+  </.live_title>
+  <link phx-track-static rel="manifest" href="/manifest.json" />
+  <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
 
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
-  </head>
-  <body class="bg-white antialiased bg-zinc-200">
-    <%= @inner_content %>
-  </body>
+  <!-- Icons-->
+  <link rel="apple-touch-icon" sizes="152x152" href={~p"/assets/images/icons/apple/speedswapp_logo_152x152.png"}>
+  <link rel="apple-touch-icon" sizes="180x180" href={~p"/assets/images/icons/apple/speedswapp_logo_180x180.png"}>
+  <link rel="apple-touch-icon" href={~p"/assets/images/icons/apple/speedswapp_logo.png"}>
+  <link rel="apple-touch-startup-image" href={~p"/assets/images/icons/speedswapp_splash.png"} />
+
+  <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
+</head>
+
+<body class="bg-white antialiased bg-zinc-950">
+  <%= @inner_content %>
+</body>
+
 </html>

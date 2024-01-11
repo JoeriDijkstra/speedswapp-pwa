@@ -10,11 +10,11 @@ defmodule SpeedswappWeb.NavComponents do
     ~H"""
     <div class="fixed bottom-0 z-10 w-full h-16 bg-zinc-900 lg:h-12">
       <div class="grid h-3/4 lg:h-full max-w-lg grid-cols-5 mx-auto">
-        <.bottom_nav_button navigate={"/"} icon="hero-home-solid" />
-        <.bottom_nav_button navigate={"/"} icon="hero-user-group-solid" />
-        <.bottom_nav_special navigate={"/"} icon="hero-plus-solid" />
-        <.bottom_nav_button navigate={"/"} icon="hero-magnifying-glass-solid" />
-        <.bottom_nav_button navigate={"/users/settings"} icon="hero-user-solid" />
+        <.bottom_nav_button navigate="/" icon="hero-home-solid" />
+        <.bottom_nav_button navigate="/" icon="hero-user-group-solid" />
+        <.bottom_nav_special navigate="/new" icon="hero-plus-solid" />
+        <.bottom_nav_button navigate="/" icon="hero-magnifying-glass-solid" />
+        <.bottom_nav_button navigate="/users/settings" icon="hero-user-solid" />
       </div>
     </div>
     """
@@ -28,7 +28,10 @@ defmodule SpeedswappWeb.NavComponents do
 
   def bottom_nav_button(assigns) do
     ~H"""
-    <.link href={@navigate} class="inline-flex flex-col items-center justify-center px-5 hover:bg-zinc-800 group">
+    <.link
+      href={@navigate}
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-zinc-800 group"
+    >
       <.icon name={@icon} class="h-5 w-5 text-white" />
     </.link>
     """
@@ -42,7 +45,10 @@ defmodule SpeedswappWeb.NavComponents do
 
   def bottom_nav_special(assigns) do
     ~H"""
-    <.link href={@navigate} class="inline-flex flex-col text-2xl items-center justify-center px-5 hover:bg-blue-900 group bg-blue-700 rounded-full my-1 mx-3">
+    <.link
+      href={@navigate}
+      class="inline-flex flex-col text-2xl items-center justify-center px-5 hover:bg-blue-900 group bg-blue-700 rounded-full my-1 mx-3"
+    >
       <.icon name={@icon} class="h-8 w-8 text-white font-bold" />
     </.link>
     """
@@ -62,7 +68,6 @@ defmodule SpeedswappWeb.NavComponents do
     """
   end
 
-
   @doc """
   Renders the content for the dropdown
   """
@@ -71,7 +76,10 @@ defmodule SpeedswappWeb.NavComponents do
 
   def dropdown_content(assigns) do
     ~H"""
-    <div id={@identifier} class="z-10 hidden bg-white divide-y divide-gray-300 rounded-lg shadow-md border mx-8">
+    <div
+      id={@identifier}
+      class="z-10 hidden bg-white divide-y divide-gray-300 rounded-lg shadow-md border mx-8"
+    >
       <ul class="py-2 text-md">
         <%= render_slot(@inner_block) %>
       </ul>

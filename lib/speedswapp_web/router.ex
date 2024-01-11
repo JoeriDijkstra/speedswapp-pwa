@@ -30,7 +30,6 @@ defmodule SpeedswappWeb.Router do
 
   # Enable Swoosh mailbox preview in development
   if Application.compile_env(:speedswapp, :dev_routes) do
-
     scope "/dev" do
       pipe_through :browser
 
@@ -61,7 +60,8 @@ defmodule SpeedswappWeb.Router do
       on_mount: [{SpeedswappWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-      live "/", FeedLive
+      live "/", FeedLive, :index
+      live "/new", NewPostLive, :index
     end
   end
 

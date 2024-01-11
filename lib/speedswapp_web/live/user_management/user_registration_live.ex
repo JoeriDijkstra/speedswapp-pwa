@@ -31,6 +31,8 @@ defmodule SpeedswappWeb.UserRegistrationLive do
           Oops, something went wrong! Please check the errors below.
         </.error>
 
+        <.input field={@form[:handle]} type="text" label="Handle (Can not be changed later)" required />
+
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
         <.input field={@form[:code]} type="password" label="Registration Code" required />
@@ -70,7 +72,9 @@ defmodule SpeedswappWeb.UserRegistrationLive do
         {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}
 
       {:error, :code_not_accepted} ->
-        info = "Oh, no! Your registration hit a speed bump. The code you've entered isn't valid. Please double-check and try again."
+        info =
+          "Oh, no! Your registration hit a speed bump. The code you've entered isn't valid. Please double-check and try again."
+
         {:noreply, socket |> put_flash(:error, info)}
     end
   end
