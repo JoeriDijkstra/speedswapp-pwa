@@ -37,7 +37,7 @@ defmodule SpeedswappWeb.UserSettingsLive do
     </div>
 
     <.modal id="change-email-modal">
-      <h2 class="text-xl font-bold">Update email</h2>
+      <h2 class="text-xl font-bold text-zinc-100">Update email</h2>
       <.simple_form
         for={@email_form}
         id="email_form"
@@ -60,8 +60,8 @@ defmodule SpeedswappWeb.UserSettingsLive do
       </.simple_form>
     </.modal>
 
-    <.modal id="change-password-modal" <div class="space-y-12 divide-y mb-20">
-      <h2 class="text-xl font-bold">Update password</h2>
+    <.modal id="change-password-modal">
+      <h2 class="text-xl font-bold text-zinc-100">Update password</h2>
       <.simple_form
         for={@password_form}
         id="password_form"

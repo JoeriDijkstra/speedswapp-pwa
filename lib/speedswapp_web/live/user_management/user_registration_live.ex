@@ -7,9 +7,8 @@ defmodule SpeedswappWeb.UserRegistrationLive do
   def render(assigns) do
     ~H"""
     <.container>
-      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Register for an account</h5>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Register for a new account</h5>
       <p class="text-zinc-200">
-        Don't have an account?
         Already registered?
         <.link navigate={~p"/users/log_in"} class="font-semibold text-white hover:underline">
           Sign in
