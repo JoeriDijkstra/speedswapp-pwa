@@ -13,10 +13,11 @@ defmodule SpeedswappWeb.NewPostLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm px-8 py-8 bg-white rounded-lg mt-8 mb-32">
-      <.header class="text-center">
-        Create a new post
-      </.header>
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Create a new post</h5>
+      <p class="text-zinc-400 text-sm mb-0">
+        Hi <%= assigns.current_user.handle %> &#128075;, here you can manage your account information
+      </p>
       <.simple_form for={@form} phx-change="validate" phx-submit="save-post">
         <.input field={@form[:caption]} label="Caption" required />
         <.input field={@form[:description]} type="textarea" label="Description" required />
@@ -29,11 +30,11 @@ defmodule SpeedswappWeb.NewPostLive do
         <div class="flex items-center justify-center w-full phx-drop-target={@uploads.image.ref}">
           <label
             for={@uploads.image.ref}
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-500 border-dashed rounded-lg cursor-pointer bg-zinc-700"
           >
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
-                class="w-8 h-8 mb-4 text-gray-500"
+                class="w-8 h-8 mb-4 text-gray-300"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -47,10 +48,10 @@ defmodule SpeedswappWeb.NewPostLive do
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
-              <p class="mb-2 text-sm text-gray-500">
+              <p class="mb-2 text-sm text-gray-300">
                 <span class="font-semibold">Click to upload</span>
               </p>
-              <p class="text-xs text-gray-500">
+              <p class="text-xs text-gray-300">
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
@@ -62,7 +63,7 @@ defmodule SpeedswappWeb.NewPostLive do
           <.button type="submit" phx-disable-with="Saving...">Create Post</.button>
         </:actions>
       </.simple_form>
-    </div>
+    </.container>
     """
   end
 

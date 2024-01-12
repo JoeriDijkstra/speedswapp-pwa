@@ -5,9 +5,8 @@ defmodule SpeedswappWeb.UserConfirmationLive do
 
   def render(%{live_action: :edit} = assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Confirm Account</.header>
-
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Confirm account</h5>
       <.simple_form for={@form} id="confirmation_form" phx-submit="confirm_account">
         <.input field={@form[:token]} type="hidden" />
         <:actions>
@@ -19,7 +18,7 @@ defmodule SpeedswappWeb.UserConfirmationLive do
         <.link href={~p"/users/register"}>Register</.link>
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
-    </div>
+    </.container>
     """
   end
 

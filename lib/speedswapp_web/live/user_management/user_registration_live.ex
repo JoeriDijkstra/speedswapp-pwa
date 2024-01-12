@@ -6,17 +6,17 @@ defmodule SpeedswappWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm px-8 py-8 bg-white rounded-lg mt-8">
-      <.header class="text-center">
-        Register for an account
-        <:subtitle>
-          Already registered?
-          <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            Sign in
-          </.link>
-          to your account now.
-        </:subtitle>
-      </.header>
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Register for an account</h5>
+      <p class="text-zinc-200">
+        Don't have an account?
+        Already registered?
+        <.link navigate={~p"/users/log_in"} class="font-semibold text-white hover:underline">
+          Sign in
+        </.link>
+        to your account now.
+        for an account now.
+      </p>
 
       <.simple_form
         for={@form}
@@ -41,7 +41,7 @@ defmodule SpeedswappWeb.UserRegistrationLive do
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
         </:actions>
       </.simple_form>
-    </div>
+    </.container>
     """
   end
 

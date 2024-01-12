@@ -3,17 +3,15 @@ defmodule SpeedswappWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm px-8 py-8 bg-white rounded-lg mt-8">
-      <.header class="text-center">
-        Sign in to account
-        <:subtitle>
-          Don't have an account?
-          <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            Sign up
-          </.link>
-          for an account now.
-        </:subtitle>
-      </.header>
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Account settings</h5>
+      <p class="text-zinc-200">
+        Don't have an account?
+        <.link navigate={~p"/users/register"} class="font-semibold text-white hover:underline">
+          Sign up
+        </.link>
+        for an account now.
+      </p>
 
       <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
         <.input field={@form[:email]} type="email" label="Email" required />
@@ -21,7 +19,7 @@ defmodule SpeedswappWeb.UserLoginLive do
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-          <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
+          <.link href={~p"/users/reset_password"} class="text-sm text-white font-semibold">
             Forgot your password?
           </.link>
         </:actions>
@@ -31,7 +29,7 @@ defmodule SpeedswappWeb.UserLoginLive do
           </.button>
         </:actions>
       </.simple_form>
-    </div>
+    </.container>
     """
   end
 

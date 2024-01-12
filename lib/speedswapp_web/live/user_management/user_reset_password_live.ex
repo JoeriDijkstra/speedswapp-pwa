@@ -5,9 +5,8 @@ defmodule SpeedswappWeb.UserResetPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Reset Password</.header>
-
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Reset password</h5>
       <.simple_form
         for={@form}
         id="reset_password_form"
@@ -30,11 +29,11 @@ defmodule SpeedswappWeb.UserResetPasswordLive do
         </:actions>
       </.simple_form>
 
-      <p class="text-center text-sm mt-4">
+      <p class="text-center text-sm text-zinc-100 mt-4">
         <.link href={~p"/users/register"}>Register</.link>
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
-    </div>
+    </.container>
     """
   end
 
