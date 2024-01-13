@@ -3,6 +3,7 @@ defmodule SpeedswappWeb.NewPostLive do
 
   alias Speedswapp.Posts.Post
   alias Speedswapp.Posts
+  alias Speedswapp.Groups
 
   @impl true
   def render(%{loading: true} = assigns) do
@@ -21,7 +22,13 @@ defmodule SpeedswappWeb.NewPostLive do
       <.simple_form for={@form} phx-change="validate" phx-submit="save-post">
         <.input field={@form[:caption]} label="Caption" required />
         <.input field={@form[:description]} type="textarea" label="Description" required />
-        <.input field={@form[:group_id]} type="number" label="Group ID" required />
+        <.input
+          field={@form[:group_id]}
+          type="select"
+          label="Group"
+          options={Groups.list_for_select(assigns.current_user)}
+          required
+        />
 
         <%= for entry <- @uploads.image.entries do %>
           <.live_img_preview entry={entry} class="rounded-lg w-full" />

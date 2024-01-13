@@ -18,7 +18,12 @@ defmodule SpeedswappWeb.GroupsLive do
       <.simple_form for={@form} phx-submit="create_group" phx-change="validate_group">
         <.input field={@form[:name]} label="Name" required />
         <.input field={@form[:description]} label="Description" type="textarea" required />
+        <p class="text-zinc-400 text-sm mb-0 mt-0">
+          If you make your group public, everyone can post in your group. Otherwise only
+          promoted users can post in your group.
+        </p>
         <.input field={@form[:public]} label="Public" type="checkbox" />
+
         <%= for entry <- @uploads.image.entries do %>
           <.live_img_preview entry={entry} class="rounded-lg w-full" />
         <% end %>
@@ -63,7 +68,7 @@ defmodule SpeedswappWeb.GroupsLive do
       <h5 class="text-xl font-semibold tracking-tight text-gray-100">Your groups</h5>
       <p class="text-zinc-400 text-sm mb-4">Manage your groups, you can find new groups here</p>
       <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
-      <div class="mt-8 mb-8">
+      <div class="mt-8 mb-8 rounded-lg">
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
           <button
             type="button"
@@ -93,7 +98,7 @@ defmodule SpeedswappWeb.GroupsLive do
         socket
         |> assign(form: form, loading: false)
         |> allow_upload(:image, accept: ~w(.jpg .jpeg .png), max_entries: 1)
-        |> stream(:groups, Groups.list(socket))
+        |> stream(:groups, Groups.list(socket.assigns.current_user))
 
       {:ok, socket}
     else
@@ -124,8 +129,7 @@ defmodule SpeedswappWeb.GroupsLive do
 
         {:noreply, socket}
 
-      {:error, changeset} ->
-        IO.inspect(changeset, label: "Group")
+      {:error, _changeset} ->
         {:noreply, socket}
     end
   end

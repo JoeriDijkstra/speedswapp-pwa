@@ -9,7 +9,7 @@ defmodule SpeedswappWeb.UserSettingsLive do
       <div class="width-100 bg-zinc-800 text-black m-h-64 border-b-1 border-zinc-800 mb-5 mt-5 p-4 rounded-lg">
         <h5 class="text-xl font-semibold tracking-tight text-gray-100">Account settings</h5>
         <p class="text-zinc-400 text-sm">
-          Hi <%= assigns.current_user.handle %> &#128075;, here you can manage your account information
+          Hi <%= assigns.current_user.handle || "there" %> &#128075;, here you can manage your account information
           <div class="text-white font-bold mt-8 mb-8">
             <button
               type="button"

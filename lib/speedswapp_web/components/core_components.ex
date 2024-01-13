@@ -301,7 +301,7 @@ defmodule SpeedswappWeb.CoreComponents do
 
     ~H"""
     <div phx-feedback-for={@name}>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-100">
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -309,7 +309,7 @@ defmodule SpeedswappWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-300 text-zinc-300 focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -326,7 +326,7 @@ defmodule SpeedswappWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-zinc-800 bg-zinc-700 shadow-sm text-zinc-100"
         multiple={@multiple}
         {@rest}
       >
