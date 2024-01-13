@@ -1,32 +1,27 @@
-defmodule SpeedswappWeb.NewPostLive do
+defmodule SpeedswappWeb.GroupsLive do
   use SpeedswappWeb, :live_view
 
-  alias Speedswapp.Posts.Post
-  alias Speedswapp.Posts
+  alias Speedswapp.Groups.Group
+  alias Speedswapp.Groups
 
   @impl true
   def render(%{loading: true} = assigns) do
     ~H"""
-    Loading...
+    <h1 class="text-2xl">Loading Speedswapp</h1>
     """
   end
 
   def render(assigns) do
     ~H"""
-    <.container>
-      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Create a new post</h5>
-      <p class="text-zinc-400 text-sm mb-0">
-        Hi <%= assigns.current_user.handle %> &#128075;, here you can manage your account information
-      </p>
-      <.simple_form for={@form} phx-change="validate" phx-submit="save-post">
-        <.input field={@form[:caption]} label="Caption" required />
-        <.input field={@form[:description]} type="textarea" label="Description" required />
-        <.input field={@form[:group_id]} type="number" label="Group ID" required />
-
+    <.modal id="create-group-modal">
+      <h2 class="text-xl font-bold text-zinc-100">Create a group</h2>
+      <.simple_form for={@form} phx-submit="create_group" phx-change="validate_group">
+        <.input field={@form[:name]} label="Name" required />
+        <.input field={@form[:description]} label="Description" type="textarea" required />
+        <.input field={@form[:public]} label="Public" type="checkbox" />
         <%= for entry <- @uploads.image.entries do %>
           <.live_img_preview entry={entry} class="rounded-lg w-full" />
         <% end %>
-
         <div class="flex items-center justify-center w-full phx-drop-target={@uploads.image.ref}">
           <label
             for={@uploads.image.ref}
@@ -52,33 +47,53 @@ defmodule SpeedswappWeb.NewPostLive do
                 <span class="font-semibold">Click to upload</span>
               </p>
               <p class="text-xs text-gray-300">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
+                PNG, JPG
               </p>
             </div>
             <.live_file_input id="dropzone-file" upload={@uploads.image} class="hidden" />
           </label>
         </div>
-
         <:actions>
-          <.button type="submit" phx-disable-with="Saving...">Create Post</.button>
+          <.button phx-disable-with="Creating...">Create group</.button>
         </:actions>
       </.simple_form>
+    </.modal>
+
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Your groups</h5>
+      <p class="text-zinc-400 text-sm mb-4">Manage your groups, you can find new groups here</p>
+      <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
+      <div class="mt-8 mb-8">
+        <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
+          <button
+            type="button"
+            class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700"
+          >
+            <img
+              class="w-10 h-10 rounded-full mr-4"
+              src={group.image_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
+            />
+            <%= group.name %>
+          </button>
+        </div>
+      </div>
     </.container>
     """
   end
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket) do
+    if(connected?(socket)) do
       form =
-        %Post{}
-        |> Post.changeset(%{})
-        |> to_form(as: "post")
+        %Group{}
+        |> Group.changeset(%{})
+        |> to_form(as: "group")
 
       socket =
         socket
         |> assign(form: form, loading: false)
         |> allow_upload(:image, accept: ~w(.jpg .jpeg .png), max_entries: 1)
+        |> stream(:groups, Groups.list(socket))
 
       {:ok, socket}
     else
@@ -87,41 +102,30 @@ defmodule SpeedswappWeb.NewPostLive do
   end
 
   @impl true
-  def handle_event("validate", %{"post" => post}, socket) do
+  def handle_event("validate_group", %{"group" => group}, socket) do
     form =
-      %Post{}
-      |> Post.changeset(post)
-      |> to_form(as: "post")
+      %Group{}
+      |> Group.changeset(group)
+      |> to_form(as: "group")
 
     {:noreply, assign(socket, form: form)}
   end
 
-  def handle_event("save-post", %{"post" => post_params}, socket) do
-    %{current_user: user} = socket.assigns
-
-    post_params
-    |> Map.put("user_id", user.id)
+  def handle_event("create_group", %{"group" => group_params}, socket) do
+    group_params
     |> Map.put("image_path", List.first(consume_files(socket)))
-    |> Posts.save()
+    |> Groups.save()
     |> case do
-      {:ok, post} ->
+      {:ok, _post} ->
         socket =
           socket
-          |> put_flash(:info, "Post created succesfully")
-          |> push_navigate(to: ~p"/")
-
-        Phoenix.PubSub.broadcast(
-          Speedswapp.PubSub,
-          "posts",
-          {:new,
-           post
-           |> Map.put(:user, user)
-           |> Speedswapp.Repo.preload(:group)}
-        )
+          |> put_flash(:info, "Group created succesfully")
+          |> push_navigate(to: ~p"/groups")
 
         {:noreply, socket}
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
+        IO.inspect(changeset, label: "Group")
         {:noreply, socket}
     end
   end

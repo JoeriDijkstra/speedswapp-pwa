@@ -20,7 +20,10 @@ defmodule SpeedswappWeb.FeedLive do
         class="width-100 bg-zinc-800 text-black m-h-64 border-b-1 border-zinc-800 mb-5 mt-5 p-4 rounded-lg"
       >
         <div class="flex items-center gap-4 mb-2">
-          <img class="w-10 h-10 rounded-full" src={post.user.avatar_path} />
+          <img
+            class="w-10 h-10 rounded-full"
+            src={post.user.avatar_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
+          />
           <div class="font-medium text-white">
             <div><%= post.user.handle || "Unhandled" %></div>
             <div class="text-sm text-zinc-300 dark:text-gray-400">

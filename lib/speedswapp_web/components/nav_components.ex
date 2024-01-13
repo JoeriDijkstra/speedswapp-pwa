@@ -11,7 +11,7 @@ defmodule SpeedswappWeb.NavComponents do
     <div class="fixed bottom-0 z-10 w-full h-16 bg-zinc-900 lg:h-12">
       <div class="grid h-3/4 lg:h-full max-w-lg grid-cols-5 mx-auto">
         <.bottom_nav_button navigate="/" icon="hero-home-solid" />
-        <.bottom_nav_button navigate="/" icon="hero-user-group-solid" />
+        <.bottom_nav_button navigate="/groups" icon="hero-user-group-solid" />
         <.bottom_nav_special navigate="/new" icon="hero-plus-solid" />
         <.bottom_nav_button navigate="/" icon="hero-magnifying-glass-solid" />
         <.bottom_nav_button navigate="/users/settings" icon="hero-user-solid" />

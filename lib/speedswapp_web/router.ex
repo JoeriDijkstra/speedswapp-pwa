@@ -62,6 +62,7 @@ defmodule SpeedswappWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
       live "/", FeedLive, :index
       live "/new", NewPostLive, :index
+      live "/groups", GroupsLive, :index
     end
   end
 

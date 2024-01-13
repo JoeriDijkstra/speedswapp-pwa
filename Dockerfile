@@ -88,4 +88,5 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/speedswapp ./
 
 USER nobody
 
+RUN chmod +x /app/bin/migrate /app/bin/server
 CMD ["/app/bin/server"]

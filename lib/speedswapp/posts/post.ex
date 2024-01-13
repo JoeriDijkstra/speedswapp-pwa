@@ -20,6 +20,6 @@ defmodule Speedswapp.Posts.Post do
   def changeset(post, attrs) do
     post
     |> cast(attrs, [:caption, :image_path, :description, :user_id, :group_id])
-    |> validate_required([:caption, :image_path, :description, :user_id, :group_id])
+    |> validate_required([:caption, :description, :user_id, :group_id])
   end
 end
