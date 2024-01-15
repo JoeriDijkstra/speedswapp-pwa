@@ -26,3 +26,8 @@ swap_size_mb = 512
     type = "connections"
     hard_limit = 1000
     soft_limit = 1000
+
+[mounts]
+  source="speedswapp_files"
+  destination="/app/lib/speedswapp-0.1.0/priv/static/uploads"
+
