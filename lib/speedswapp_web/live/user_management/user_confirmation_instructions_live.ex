@@ -5,11 +5,13 @@ defmodule SpeedswappWeb.UserConfirmationInstructionsLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">
+    <.container>
+      <h5 class="text-xl font-semibold tracking-tight text-gray-100">
         No confirmation instructions received?
-        <:subtitle>We'll send a new confirmation link to your inbox</:subtitle>
-      </.header>
+      </h5>
+      <p class="text-zinc-200">
+        We'll send a new confirmation link to your inbox
+      </p>
 
       <.simple_form for={@form} id="resend_confirmation_form" phx-submit="send_instructions">
         <.input field={@form[:email]} type="email" placeholder="Email" required />
@@ -24,7 +26,7 @@ defmodule SpeedswappWeb.UserConfirmationInstructionsLive do
         <.link href={~p"/users/register"}>Register</.link>
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
-    </div>
+    </.container>
     """
   end
 
