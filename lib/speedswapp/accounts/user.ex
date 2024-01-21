@@ -132,6 +132,12 @@ defmodule Speedswapp.Accounts.User do
     |> validate_password(opts)
   end
 
+  def avatar_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:avatar_path])
+    |> validate_required(:avatar_path)
+  end
+
   @doc """
   Confirms the account by setting `confirmed_at`.
   """

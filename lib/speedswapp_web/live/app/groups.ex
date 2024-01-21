@@ -27,37 +27,9 @@ defmodule SpeedswappWeb.GroupsLive do
         <%= for entry <- @uploads.image.entries do %>
           <.live_img_preview entry={entry} class="rounded-lg w-full" />
         <% end %>
-        <div class="flex items-center justify-center w-full phx-drop-target={@uploads.image.ref}">
-          <label
-            for={@uploads.image.ref}
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-500 border-dashed rounded-lg cursor-pointer bg-zinc-700"
-          >
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg
-                class="w-8 h-8 mb-4 text-gray-300"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 16"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                />
-              </svg>
-              <p class="mb-2 text-sm text-gray-300">
-                <span class="font-semibold">Click to upload</span>
-              </p>
-              <p class="text-xs text-gray-300">
-                PNG, JPG
-              </p>
-            </div>
-            <.live_file_input id="dropzone-file" upload={@uploads.image} class="hidden" />
-          </label>
-        </div>
+
+        <.file_input input={@uploads.image} />
+
         <:actions>
           <.button phx-disable-with="Creating...">Create group</.button>
         </:actions>
@@ -72,10 +44,10 @@ defmodule SpeedswappWeb.GroupsLive do
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
           <button
             type="button"
-            class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700"
+            class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
           >
             <img
-              class="w-10 h-10 rounded-full mr-4"
+              class="w-10 h-10 rounded-lg mr-4 object-cover"
               src={group.image_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
             />
             <%= group.name %>
@@ -97,7 +69,11 @@ defmodule SpeedswappWeb.GroupsLive do
       socket =
         socket
         |> assign(form: form, loading: false)
-        |> allow_upload(:image, accept: ~w(.jpg .jpeg .png), max_entries: 1)
+        |> allow_upload(:image,
+          accept: ~w(.jpg .jpeg .png),
+          max_entries: 1,
+          max_file_size: 2_000_000
+        )
         |> stream(:groups, Groups.list(socket.assigns.current_user))
 
       {:ok, socket}
@@ -136,10 +112,18 @@ defmodule SpeedswappWeb.GroupsLive do
 
   defp consume_files(socket) do
     consume_uploaded_entries(socket, :image, fn %{path: path}, _entry ->
-      dest = Path.join([:code.priv_dir(:speedswapp), "static", "uploads", Path.basename(path)])
+      dest =
+        Path.join([
+          :code.priv_dir(:speedswapp),
+          "static",
+          "uploads",
+          "groups",
+          Path.basename(path)
+        ])
+
       File.cp!(path, dest)
 
-      {:postpone, ~p"/uploads/#{Path.basename(dest)}"}
+      {:postpone, ~p"/uploads/groups/#{Path.basename(dest)}"}
     end)
   end
 end

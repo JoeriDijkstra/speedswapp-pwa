@@ -184,6 +184,16 @@ defmodule Speedswapp.Accounts do
     UserNotifier.deliver_update_email_instructions(user, update_email_url_fun.(encoded_token))
   end
 
+  def change_user_avatar(user, attrs \\ %{}) do
+    User.avatar_changeset(user, attrs)
+  end
+
+  def update_user_avatar(user, attrs) do
+    user
+    |> User.avatar_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for changing the user password.
 

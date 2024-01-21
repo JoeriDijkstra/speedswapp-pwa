@@ -3,7 +3,13 @@ defmodule SpeedswappWeb.UserSettingsLive do
 
   alias Speedswapp.Accounts
 
-  def render(assigns) do
+  def render(%{loading: true} = assigns) do
+    ~H"""
+    Loading Speedswapp...
+    """
+  end
+
+  def render(%{loading: false} = assigns) do
     ~H"""
     <div class="mb-20 max-w-full">
       <div class="width-100 bg-zinc-800 text-black m-h-64 border-b-1 border-zinc-800 mb-5 mt-5 p-4 rounded-lg">
@@ -25,7 +31,11 @@ defmodule SpeedswappWeb.UserSettingsLive do
             >
               Change password
             </button>
-            <button type="button" class="w-full px-4 py-4 font-medium bg-zinc-700">
+            <button
+              type="button"
+              class="w-full px-4 py-4 font-medium bg-zinc-700"
+              phx-click={show_modal("change-avatar-modal")}
+            >
               Update avatar
             </button>
             <button type="button" class="w-full px-4 py-4 font-medium rounded-b-lg bg-red-800">
@@ -35,6 +45,26 @@ defmodule SpeedswappWeb.UserSettingsLive do
         </p>
       </div>
     </div>
+
+    <.modal id="change-avatar-modal">
+      <h2 class="text-xl font-bold text-zinc-100">Update avatar</h2>
+      <.simple_form
+        for={@avatar_form}
+        id="avatar_form"
+        phx-submit="update_avatar"
+        phx-change="validate_avatar"
+      >
+        <%= for entry <- @uploads.avatar.entries do %>
+          <.live_img_preview entry={entry} class="rounded-lg w-full" />
+        <% end %>
+
+        <.file_input input={@uploads.avatar} />
+
+        <:actions>
+          <.button phx-disable-with="Changing...">Change Avatar</.button>
+        </:actions>
+      </.simple_form>
+    </.modal>
 
     <.modal id="change-email-modal">
       <h2 class="text-xl font-bold text-zinc-100">Update email</h2>
@@ -114,20 +144,32 @@ defmodule SpeedswappWeb.UserSettingsLive do
   end
 
   def mount(_params, _session, socket) do
-    user = socket.assigns.current_user
-    email_changeset = Accounts.change_user_email(user)
-    password_changeset = Accounts.change_user_password(user)
+    if connected?(socket) do
+      user = socket.assigns.current_user
+      email_changeset = Accounts.change_user_email(user)
+      password_changeset = Accounts.change_user_password(user)
+      avatar_changeset = Accounts.change_user_avatar(user)
 
-    socket =
-      socket
-      |> assign(:current_password, nil)
-      |> assign(:email_form_current_password, nil)
-      |> assign(:current_email, user.email)
-      |> assign(:email_form, to_form(email_changeset))
-      |> assign(:password_form, to_form(password_changeset))
-      |> assign(:trigger_submit, false)
+      socket =
+        socket
+        |> assign(:current_password, nil)
+        |> assign(:email_form_current_password, nil)
+        |> assign(:current_email, user.email)
+        |> assign(:email_form, to_form(email_changeset))
+        |> assign(:password_form, to_form(password_changeset))
+        |> assign(:avatar_form, to_form(avatar_changeset))
+        |> assign(:trigger_submit, false)
+        |> assign(:loading, false)
+        |> allow_upload(:avatar,
+          accept: ~w(.jpg .jpeg .png),
+          max_entries: 1,
+          max_file_size: 2_000_000
+        )
 
-    {:ok, socket}
+      {:ok, socket}
+    else
+      {:ok, assign(socket, loading: true)}
+    end
   end
 
   def handle_event("validate_email", params, socket) do
@@ -190,5 +232,43 @@ defmodule SpeedswappWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  def handle_event("update_avatar", _, socket) do
+    %{current_user: user} = socket.assigns
+
+    case Accounts.update_user_avatar(user, %{"avatar_path" => List.first(consume_files(socket))}) do
+      {:ok, _user} ->
+        socket =
+          socket
+          |> put_flash(:info, "Succesfully updated avatar")
+          |> push_navigate(to: ~p"/")
+
+        {:noreply, socket}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, "Something went wrong updating your avatar")}
+    end
+  end
+
+  def handle_event("validate_avatar", _, socket) do
+    {:noreply, socket}
+  end
+
+  defp consume_files(socket) do
+    consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
+      dest =
+        Path.join([
+          :code.priv_dir(:speedswapp),
+          "static",
+          "uploads",
+          "avatars",
+          Path.basename(path)
+        ])
+
+      File.cp!(path, dest)
+
+      {:postpone, ~p"/uploads/avatars/#{Path.basename(dest)}"}
+    end)
   end
 end

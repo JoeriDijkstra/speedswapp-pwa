@@ -60,9 +60,14 @@ defmodule SpeedswappWeb.Router do
       on_mount: [{SpeedswappWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      # Posts
       live "/", FeedLive, :index
       live "/new", NewPostLive, :index
+
+      # Groups
       live "/groups", GroupsLive, :index
+      live "/group/:group_id", GroupDetailLive, :index
     end
   end
 

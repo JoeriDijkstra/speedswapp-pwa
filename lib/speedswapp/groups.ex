@@ -16,6 +16,10 @@ defmodule Speedswapp.Groups do
     Repo.all(query)
   end
 
+  def get(id) do
+    Repo.get(Group, id)
+  end
+
   def list_for_select(%User{} = user) do
     user
     |> list()
