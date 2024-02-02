@@ -1,4 +1,5 @@
 defmodule SpeedswappWeb.NewPostLive do
+  alias Speedswapp.Uploader
   use SpeedswappWeb, :live_view
 
   alias Speedswapp.Posts.Post
@@ -57,8 +58,7 @@ defmodule SpeedswappWeb.NewPostLive do
         |> assign(form: form, loading: false)
         |> allow_upload(:image,
           accept: ~w(.jpg .jpeg .png),
-          max_entries: 1,
-          max_file_size: 2_000_000
+          max_entries: 1
         )
 
       {:ok, socket}
@@ -110,13 +110,8 @@ defmodule SpeedswappWeb.NewPostLive do
   end
 
   defp consume_files(socket) do
-    consume_uploaded_entries(socket, :image, fn %{path: path}, _entry ->
-      dest =
-        Path.join([:code.priv_dir(:speedswapp), "static", "uploads", "posts", Path.basename(path)])
-
-      File.cp!(path, dest)
-
-      {:postpone, ~p"/uploads/posts/#{Path.basename(dest)}"}
+    consume_uploaded_entries(socket, :image, fn %{path: path}, %{uuid: uuid} ->
+      Uploader.do_upload(path, "posts/post-#{uuid}.jpg")
     end)
   end
 end
