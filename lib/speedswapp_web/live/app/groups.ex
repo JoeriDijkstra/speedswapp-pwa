@@ -48,7 +48,7 @@ defmodule SpeedswappWeb.GroupsLive do
           >
             <img
               class="w-10 h-10 rounded-lg mr-4 object-cover"
-              src={group.image_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
+              src={group.image_path}
             />
             <%= group.name %>
           </button>
@@ -94,7 +94,7 @@ defmodule SpeedswappWeb.GroupsLive do
 
   def handle_event("create_group", %{"group" => group_params}, socket) do
     group_params
-    |> Map.put("image_path", List.first(consume_files(socket, group_params)))
+    |> Map.put("image_path", List.first(consume_files(socket)))
     |> Groups.save()
     |> case do
       {:ok, _post} ->
@@ -110,14 +110,14 @@ defmodule SpeedswappWeb.GroupsLive do
     end
   end
 
-  defp consume_files(socket, params) do
-    IO.inspect(params, label: "params")
-
+  defp consume_files(socket) do
     consume_uploaded_entries(socket, :image, fn %{path: path}, %{uuid: uuid, client_name: client_name} ->
       image = File.read!(path)
 
-      ExAws.S3.put_object("speedswapp", "groups/#{uuid}-#{client_name}", image, acl: :public_read)
+      "speedswapp"
+      |> ExAws.S3.put_object("groups/#{uuid}-#{client_name}", image, acl: :public_read)
       |> ExAws.request()
+      |> IO.inspect(label: "exaws")
 
       {:postpone, "https://speedswapp.ams3.digitaloceanspaces.com/groups/#{uuid}-#{client_name}"}
     end)
