@@ -2,6 +2,7 @@ defmodule SpeedswappWeb.GroupsLive do
   use SpeedswappWeb, :live_view
 
   alias Speedswapp.Groups.Group
+  alias Speedswapp.Uploader
   alias Speedswapp.Groups
 
   @impl true
@@ -71,8 +72,7 @@ defmodule SpeedswappWeb.GroupsLive do
         |> assign(form: form, loading: false)
         |> allow_upload(:image,
           accept: ~w(.jpg .jpeg .png),
-          max_entries: 1,
-          max_file_size: 2_000_000
+          max_entries: 1
         )
         |> stream(:groups, Groups.list(socket.assigns.current_user))
 
@@ -111,15 +111,8 @@ defmodule SpeedswappWeb.GroupsLive do
   end
 
   defp consume_files(socket) do
-    consume_uploaded_entries(socket, :image, fn %{path: path}, %{uuid: uuid, client_name: client_name} ->
-      image = File.read!(path)
-
-      "speedswapp"
-      |> ExAws.S3.put_object("groups/#{uuid}-#{client_name}", image, acl: :public_read)
-      |> ExAws.request()
-      |> IO.inspect(label: "exaws")
-
-      {:postpone, "https://speedswapp.ams3.digitaloceanspaces.com/groups/#{uuid}-#{client_name}"}
+    consume_uploaded_entries(socket, :image, fn %{path: path}, %{uuid: uuid} ->
+      Uploader.do_upload(path, "groups/group-#{uuid}.jpg", &Uploader.to_thumbnail/1)
     end)
   end
 end

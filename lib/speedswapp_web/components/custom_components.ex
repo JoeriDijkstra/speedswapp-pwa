@@ -64,7 +64,7 @@ defmodule SpeedswappWeb.CustomComponents do
         <div class="flex items-center gap-4 mb-2">
           <img
             class="w-10 h-10 rounded-lg object-cover"
-            src={post.user.avatar_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
+            src={post.user.avatar_path}
           />
           <div class="font-medium text-white">
             <div><%= post.user.handle || "Unhandled" %></div>
