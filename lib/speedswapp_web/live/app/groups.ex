@@ -118,7 +118,7 @@ defmodule SpeedswappWeb.GroupsLive do
 
   def handle_event("create_group", %{"group" => group_params}, socket) do
     group_params
-    |> Map.put("image_path", List.first(consume_files(socket)))
+    |> Map.put("image_path", List.first(consume_files(socket, group_params)))
     |> Groups.save()
     |> case do
       {:ok, _post} ->
@@ -134,12 +134,16 @@ defmodule SpeedswappWeb.GroupsLive do
     end
   end
 
-  defp consume_files(socket) do
-    consume_uploaded_entries(socket, :image, fn %{path: path}, _entry ->
-      dest = Path.join([:code.priv_dir(:speedswapp), "static", "uploads", Path.basename(path)])
-      File.cp!(path, dest)
+  defp consume_files(socket, params) do
+    IO.inspect(params, label: "params")
 
-      {:postpone, ~p"/uploads/#{Path.basename(dest)}"}
+    consume_uploaded_entries(socket, :image, fn %{path: path}, %{uuid: uuid, client_name: client_name} ->
+      image = File.read!(path)
+
+      ExAws.S3.put_object("speedswapp", "groups/#{uuid}-#{client_name}", image, acl: :public_read)
+      |> ExAws.request()
+
+      {:postpone, "https://speedswapp.ams3.digitaloceanspaces.com/groups/#{uuid}-#{client_name}"}
     end)
   end
 end

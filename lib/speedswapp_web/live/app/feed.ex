@@ -21,7 +21,7 @@ defmodule SpeedswappWeb.FeedLive do
       >
         <div class="flex items-center gap-4 mb-2">
           <img
-            class="w-10 h-10 rounded-full"
+            class="w-10 h-10 rounded-full object-cover"
             src={post.user.avatar_path || "https://cdn-icons-png.flaticon.com/512/3626/3626507.png"}
           />
           <div class="font-medium text-white">
@@ -31,7 +31,7 @@ defmodule SpeedswappWeb.FeedLive do
             </div>
           </div>
         </div>
-        <img class="rounded-lg w-full" src={post.image_path} />
+        <img class="rounded-lg w-full object-cover" src={post.image_path} />
         <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
           <%= post.caption %>
         </h5>
