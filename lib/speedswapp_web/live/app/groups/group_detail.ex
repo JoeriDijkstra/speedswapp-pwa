@@ -1,7 +1,9 @@
 defmodule SpeedswappWeb.GroupDetailLive do
+  use SpeedswappWeb, :live_view
+
   alias Speedswapp.Groups.Group
   alias Speedswapp.Groups
-  use SpeedswappWeb, :live_view
+  alias Speedswapp.Posts
 
   def render(%{loading: true} = assigns) do
     ~H"""
@@ -11,9 +13,19 @@ defmodule SpeedswappWeb.GroupDetailLive do
 
   def render(assigns) do
     ~H"""
-    <.container>
-      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Your group</h5>
-    </.container>
+    <.group_container>
+      <.back navigate={~p"/groups"}>Groups</.back>
+      <div class="flex gap-4 mb-2 mt-4">
+        <img class="w-18 h-18 rounded-lg object-cover" src={@group.image_path} />
+        <div class="text-white">
+          <h5 class="text-2xl font-semibold tracking-tight text-gray-100"><%= @group.name %></h5>
+          <div class="text-lg text-zinc-300 dark:text-gray-400">
+            <%= @group.description %>
+          </div>
+        </div>
+      </div>
+    </.group_container>
+    <.feed posts={@streams.posts}/>
     """
   end
 
@@ -40,6 +52,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
     socket =
       socket
       |> assign(loading: false, group: group)
+      |> stream(:posts, Posts.list_for_group(group))
 
     {:ok, socket}
   end
