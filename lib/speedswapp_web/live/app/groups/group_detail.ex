@@ -14,9 +14,13 @@ defmodule SpeedswappWeb.GroupDetailLive do
   def render(assigns) do
     ~H"""
     <.group_container>
-      <.back navigate={~p"/groups"}>Groups</.back>
-      <div class="flex gap-4 mb-2 mt-4">
-        <img class="w-18 h-18 rounded-lg object-cover" src={@group.image_path} />
+      <div class="flex items-center">
+        <.back navigate={~p"/groups"}>Groups</.back>
+        <div class="grow" />
+        <.subscribe_button/>
+      </div>
+      <div class="flex items-center gap-4 mb-2 mt-4">
+        <img class="w-12 h-12 rounded-lg object-cover" src={@group.image_path} />
         <div class="text-white">
           <h5 class="text-2xl font-semibold tracking-tight text-gray-100"><%= @group.name %></h5>
           <div class="text-lg text-zinc-300 dark:text-gray-400">

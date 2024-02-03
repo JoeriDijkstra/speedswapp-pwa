@@ -52,7 +52,8 @@ defmodule SpeedswappWeb.GroupsLive do
               class="w-10 h-10 rounded-lg mr-4 object-cover"
               src={group.image_path}
             />
-            <%= group.name %>
+            <span class="grow"><%= group.name %></span>
+            <.subscribe_button/>
           </.link>
         </div>
       </div>

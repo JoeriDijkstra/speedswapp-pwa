@@ -77,7 +77,7 @@ defmodule SpeedswappWeb.CustomComponents do
           <div class="font-medium text-white">
             <div><%= post.user.handle || "Unhandled" %></div>
             <div class="text-sm text-zinc-300 dark:text-gray-400">
-              Posted in <span class="text-blue-400 font-bold"><%= post.group.name %></span>
+              Posted in <.link href={"/group/" <> to_string(post.group.id)}><span class="text-blue-400 font-bold"><%= post.group.name %></span></.link>
             </div>
           </div>
         </div>
@@ -93,6 +93,12 @@ defmodule SpeedswappWeb.CustomComponents do
         <div class="bg-zinc-700"></div>
       </div>
     </div>
+    """
+  end
+
+  def subscribe_button(assigns) do
+    ~H"""
+    <span class="text-blue-400 font-bold text-s">Unsubscribe</span>
     """
   end
 end
