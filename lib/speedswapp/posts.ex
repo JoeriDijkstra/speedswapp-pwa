@@ -16,6 +16,17 @@ defmodule Speedswapp.Posts do
     Repo.all(query)
   end
 
+  def list_for_group(%{id: group_id}) do
+    query =
+      from p in Post,
+        select: p,
+        order_by: [desc: :inserted_at],
+        preload: [:user, :group],
+        where: p.group_id == ^group_id
+
+    Repo.all(query)
+  end
+
   def save(params) do
     %Post{}
     |> Post.changeset(params)

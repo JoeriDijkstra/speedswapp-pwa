@@ -43,16 +43,18 @@ defmodule SpeedswappWeb.GroupsLive do
       <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
       <div class="mt-8 mb-8 rounded-lg">
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
-          <button
+          <.link
             type="button"
+            href={"group/" <> to_string(group.id)}
             class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
           >
             <img
               class="w-10 h-10 rounded-lg mr-4 object-cover"
               src={group.image_path}
             />
-            <%= group.name %>
-          </button>
+            <span class="grow"><%= group.name %></span>
+            <.subscribe_button/>
+          </.link>
         </div>
       </div>
     </.container>

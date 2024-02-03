@@ -4,10 +4,18 @@ defmodule SpeedswappWeb.CustomComponents do
   use Phoenix.Component
 
   slot :inner_block, required: true
-
   def container(assigns) do
     ~H"""
-    <div class="mx-auto max-w-full px-4 py-4 bg-zinc-800 rounded-lg mt-8 mb-32">
+    <div class="mx-auto max-w-full px-4 py-4 bg-zinc-800 rounded-lg mb-32 mt-8">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  slot :inner_block, required: true
+  def group_container(assigns) do
+    ~H"""
+    <div class="mx-auto max-w-full px-4 py-4 bg-zinc-800 rounded-lg mt-8">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -69,7 +77,7 @@ defmodule SpeedswappWeb.CustomComponents do
           <div class="font-medium text-white">
             <div><%= post.user.handle || "Unhandled" %></div>
             <div class="text-sm text-zinc-300 dark:text-gray-400">
-              Posted in <span class="text-blue-400 font-bold"><%= post.group.name %></span>
+              Posted in <.link href={"/group/" <> to_string(post.group.id)}><span class="text-blue-400 font-bold"><%= post.group.name %></span></.link>
             </div>
           </div>
         </div>
@@ -85,6 +93,12 @@ defmodule SpeedswappWeb.CustomComponents do
         <div class="bg-zinc-700"></div>
       </div>
     </div>
+    """
+  end
+
+  def subscribe_button(assigns) do
+    ~H"""
+    <span class="text-blue-400 font-bold text-s">Unsubscribe</span>
     """
   end
 end
