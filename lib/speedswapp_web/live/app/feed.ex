@@ -20,8 +20,6 @@ defmodule SpeedswappWeb.FeedLive do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      Phoenix.PubSub.subscribe(Speedswapp.PubSub, "posts")
-
       socket =
         socket
         |> assign(loading: false)
@@ -31,15 +29,5 @@ defmodule SpeedswappWeb.FeedLive do
     else
       {:ok, assign(socket, loading: true)}
     end
-  end
-
-  @impl true
-  def handle_info({:new, post}, socket) do
-    socket =
-      socket
-      |> put_flash(:info, "#{post.user.email} just posted!")
-      |> stream_insert(:posts, post)
-
-    {:noreply, socket}
   end
 end

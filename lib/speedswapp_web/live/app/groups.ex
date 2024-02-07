@@ -43,18 +43,20 @@ defmodule SpeedswappWeb.GroupsLive do
       <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
       <div class="mt-8 mb-8 rounded-lg">
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
-          <.link
-            type="button"
-            href={"group/" <> to_string(group.id)}
-            class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
-          >
+          <div class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2">
             <img
               class="w-10 h-10 rounded-lg mr-4 object-cover"
               src={group.image_path}
             />
-            <span class="grow"><%= group.name %></span>
-            <.subscribe_button/>
-          </.link>
+            <.link
+              type="button"
+              href={"group/" <> to_string(group.id)}
+              class="grow h-full"
+            >
+            <span ><%= group.name %></span>
+            </.link>
+            <a class="text-blue-400 font-bold text-s" phx-click="unsubscribe" phx-value-group={group.id}>Unsubscribe</a>
+          </div>
         </div>
       </div>
     </.container>
@@ -109,6 +111,22 @@ defmodule SpeedswappWeb.GroupsLive do
 
       {:error, _changeset} ->
         {:noreply, socket}
+    end
+  end
+
+  def handle_event("unsubscribe", %{"group" => group_id}, %{assigns: %{current_user: current_user}} = socket) do
+    {parsed_group_id, _} = Integer.parse(group_id)
+    case Groups.unsubscribe(parsed_group_id, current_user) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, "Succesfully unsubscribed")
+          |> push_navigate(to: ~p"/groups")
+
+        {:noreply, socket}
+
+      {:error, :not_found_error} ->
+        {:noreply, put_flash(socket, :error, "You are not subscribed to the group")}
     end
   end
 

@@ -5,15 +5,42 @@ defmodule Speedswapp.Groups do
 
   alias Speedswapp.Accounts.User
   alias Speedswapp.Groups.Group
+  alias Speedswapp.Groups.GroupMembership
   alias Speedswapp.Repo
 
-  def list(%User{}) do
+  def list(%User{id: user_id}) do
     query =
       from g in Group,
         select: g,
-        order_by: [asc: :name]
+        order_by: [asc: :name],
+        join: gm in assoc(g, :group_memberships),
+        where: gm.user_id == ^user_id
 
     Repo.all(query)
+  end
+
+  def is_subscribed?(group_id, %User{id: user_id}) do
+    Repo.get_by(GroupMembership, [group_id: group_id, user_id: user_id])
+  end
+
+  def subscribe(group_id, %User{id: user_id}, promoted \\ false) do
+    %{
+      group_id: group_id,
+      user_id: user_id,
+      promoted: promoted
+    }
+    |> GroupMembership.changeset()
+    |> Repo.insert()
+  end
+
+  def unsubscribe(group_id, %User{} = user) do
+    case is_subscribed?(group_id, user) do
+      nil ->
+        {:error, :not_found_error}
+
+      %GroupMembership{} = membership ->
+        Repo.delete(membership)
+    end
   end
 
   def get(id) do

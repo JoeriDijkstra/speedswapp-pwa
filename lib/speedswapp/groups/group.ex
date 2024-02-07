@@ -1,4 +1,5 @@
 defmodule Speedswapp.Groups.Group do
+  alias Speedswapp.Groups.GroupMembership
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,6 +8,8 @@ defmodule Speedswapp.Groups.Group do
     field :name, :string
     field :image_path, :string
     field :public, :boolean, default: false
+
+    has_many :group_memberships, GroupMembership
 
     timestamps()
   end
