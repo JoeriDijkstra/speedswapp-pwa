@@ -73,7 +73,20 @@ defmodule Speedswapp.Groups do
     end)
   end
 
-  def save(params) do
+  def save(params, user) do
+    case do_create(params) do
+      {:ok, group} ->
+        %{
+          user_id: user.id,
+          group_id: group.id,
+          promoted: true
+        }
+        |> GroupMembership.changeset()
+        |> Repo.insert()
+    end
+  end
+
+  defp do_create(params) do
     %Group{}
     |> Group.changeset(params)
     |> Repo.insert()

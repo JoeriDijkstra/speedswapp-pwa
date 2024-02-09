@@ -96,16 +96,16 @@ defmodule SpeedswappWeb.GroupsLive do
     {:noreply, assign(socket, form: form)}
   end
 
-  def handle_event("create_group", %{"group" => group_params}, socket) do
+  def handle_event("create_group", %{"group" => group_params}, %{assigns: %{current_user: current_user}} = socket) do
     group_params
     |> Map.put("image_path", List.first(consume_files(socket)))
-    |> Groups.save()
+    |> Groups.save(current_user)
     |> case do
-      {:ok, _post} ->
+      {:ok, %{group_id: group_id}} ->
         socket =
           socket
           |> put_flash(:info, "Group created succesfully")
-          |> push_navigate(to: ~p"/groups")
+          |> push_navigate(to: ~p"/group/#{group_id}")
 
         {:noreply, socket}
 

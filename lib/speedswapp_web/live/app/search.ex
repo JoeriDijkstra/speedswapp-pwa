@@ -44,6 +44,9 @@ defmodule SpeedswappWeb.SearchLive do
       <.container_header>Ads</.container_header>
       <.adsense />
     </.group_container>
+    <.group_container>
+      <.container_header>Recommended</.container_header>
+    </.group_container>
     """
   end
 
