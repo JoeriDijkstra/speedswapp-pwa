@@ -18,9 +18,9 @@ defmodule SpeedswappWeb.GroupDetailLive do
         <.back navigate={~p"/groups"}>Groups</.back>
         <div class="grow" />
         <%= if(@subscribed?) do %>
-          <a class="text-blue-400 font-bold text-s" phx-click="unsubscribe" phx-value-group={@group.id}>Unsubscribe</a>
+          <a class="text-red-800 font-bold text-s" phx-click="unsubscribe" phx-value-group={@group.id}>Unsubscribe</a>
         <% else %>
-          <.button phx-click="subscribe" class="w-32" phx-value-group={@group.id}>Subscribe</.button>
+          <a class="text-blue-400 font-bold text-s" phx-click="subscribe" phx-value-group={@group.id}>Subscribe</a>
         <% end %>
       </div>
       <div class="flex items-center gap-4 mb-2 mt-4">

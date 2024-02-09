@@ -21,6 +21,27 @@ defmodule SpeedswappWeb.CustomComponents do
     """
   end
 
+  def adsense(assigns) do
+    ~H"""
+    <ins class="adsbygoogle"
+      style="display:block; text-align:center;"
+      data-ad-layout="in-article"
+      data-ad-format="fluid"
+      data-ad-client="ca-pub-7783256035891270"
+      data-ad-slot="6331846695">
+    </ins>
+    """
+  end
+
+  slot :inner_block, required: true
+  def container_header(assigns) do
+    ~H"""
+    <h5 class="text-xl font-semibold tracking-tight text-gray-100">
+      <%= render_slot(@inner_block) %>
+    </h5>
+    """
+  end
+
   attr :input, :map, required: true
 
   def file_input(assigns) do

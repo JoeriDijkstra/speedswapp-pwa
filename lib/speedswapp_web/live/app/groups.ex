@@ -38,8 +38,8 @@ defmodule SpeedswappWeb.GroupsLive do
     </.modal>
 
     <.container>
-      <h5 class="text-xl font-semibold tracking-tight text-gray-100">Your groups</h5>
-      <p class="text-zinc-400 text-sm mb-4">Manage your groups, you can find new groups here</p>
+      <.container_header>Your groups</.container_header>
+      <p class="text-zinc-400 text-sm mb-4">Hi <%= assigns.current_user.handle || "there" %> &#128075;, here you can manage your groups</p>
       <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
       <div class="mt-8 mb-8 rounded-lg">
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>

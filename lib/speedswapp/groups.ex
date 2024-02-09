@@ -19,6 +19,24 @@ defmodule Speedswapp.Groups do
     Repo.all(query)
   end
 
+  def list_all() do
+    Repo.all(Group)
+  end
+
+  def search(""), do: []
+
+  def search(search) do
+    search = "%#{String.downcase(search)}%"
+
+    query =
+      from g in Group,
+      where: like(g.search, ^search),
+      order_by: [asc: :name],
+      limit: 5
+
+    Repo.all(query)
+  end
+
   def is_subscribed?(group_id, %User{id: user_id}) do
     Repo.get_by(GroupMembership, [group_id: group_id, user_id: user_id])
   end
