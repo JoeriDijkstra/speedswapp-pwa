@@ -17,7 +17,11 @@ defmodule SpeedswappWeb.GroupDetailLive do
       <div class="flex items-center">
         <.back navigate={~p"/groups"}>Groups</.back>
         <div class="grow" />
-        <.subscribe_button/>
+        <%= if(@subscribed?) do %>
+          <a class="text-red-800 font-bold text-s" phx-click="unsubscribe" phx-value-group={@group.id}>Unsubscribe</a>
+        <% else %>
+          <a class="text-blue-400 font-bold text-s" phx-click="subscribe" phx-value-group={@group.id}>Subscribe</a>
+        <% end %>
       </div>
       <div class="flex items-center gap-4 mb-2 mt-4">
         <img class="w-12 h-12 rounded-lg object-cover" src={@group.image_path} />
@@ -31,6 +35,38 @@ defmodule SpeedswappWeb.GroupDetailLive do
     </.group_container>
     <.feed posts={@streams.posts}/>
     """
+  end
+
+  def handle_event("unsubscribe", %{"group" => group_id}, %{assigns: %{current_user: current_user}} = socket) do
+    {parsed_group_id, _} = Integer.parse(group_id)
+    case Groups.unsubscribe(parsed_group_id, current_user) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, "Succesfully unsubscribed")
+          |> push_navigate(to: ~p"/group/#{group_id}")
+
+        {:noreply, socket}
+
+      {:error, :not_found_error} ->
+        {:noreply, put_flash(socket, :error, "You are not subscribed to the group")}
+    end
+  end
+
+  def handle_event("subscribe", %{"group" => group_id}, %{assigns: %{current_user: current_user}} = socket) do
+    {parsed_group_id, _} = Integer.parse(group_id)
+    case Groups.subscribe(parsed_group_id, current_user) do
+      {:ok, _} ->
+        socket =
+          socket
+          |> put_flash(:info, "Succesfully subscribed")
+          |> push_navigate(to: ~p"/group/#{group_id}")
+
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, "Something went wrong")}
+    end
   end
 
   def mount(%{"group_id" => group_id}, _, socket) do
@@ -55,7 +91,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
   defp do_mount(socket, group) do
     socket =
       socket
-      |> assign(loading: false, group: group)
+      |> assign(loading: false, group: group, subscribed?: Groups.is_subscribed?(group.id, socket.assigns.current_user))
       |> stream(:posts, Posts.list_for_group(group))
 
     {:ok, socket}

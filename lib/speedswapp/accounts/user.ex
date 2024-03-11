@@ -1,4 +1,5 @@
 defmodule Speedswapp.Accounts.User do
+  alias Speedswapp.Groups.GroupMembership
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -9,6 +10,8 @@ defmodule Speedswapp.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    has_many :group_memberships, GroupMembership
 
     timestamps()
   end

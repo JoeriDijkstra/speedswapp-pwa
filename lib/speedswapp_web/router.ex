@@ -68,6 +68,10 @@ defmodule SpeedswappWeb.Router do
       # Groups
       live "/groups", GroupsLive, :index
       live "/group/:group_id", GroupDetailLive, :index
+
+      # Search
+      live "/search", SearchLive, :index
+      live "/search/groups", SearchGroupsLive
     end
   end
 
