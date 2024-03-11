@@ -4,9 +4,11 @@ Speedswapp was supposed to be a social media for car enthusiasts. This will no l
 
 # Running it
 You can run it via Phoenix with:
-`docker-compose up`
-`mix deps.get`
-`mix phx.server`
+```bash
+docker-compose up
+mix deps.get`
+mix phx.server
+```
 
 And it should work. What won't work is uploading files, since it requires a S3 client with the secrets in the .env file.
 
