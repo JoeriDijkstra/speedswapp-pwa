@@ -1,18 +1,23 @@
 # Speedswapp
 
-To start your Phoenix server:
+Speedswapp was supposed to be a social media for car enthusiasts. This will no longer be the case due to Apple's decision to no longer support PWA's. Instead of just shutting it down I have decided to open source the code.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+# Running it
+You can run it via Phoenix with:
+`docker-compose up`
+`mix deps.get`
+`mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+And it should work. What won't work is uploading files, since it requires a S3 client with the secrets in the .env file.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+# Contributing
+There is still some work to be done. If you want to contribute, just follow the code guidelines used in the current codebase and shoot me an MR.
 
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+# To be done
+- [ ] Configurable file storage, perhaps locally using minio in docker
+- [ ] Add comments
+- [ ] Add likes
+- [ ] Add comments on comments
+- [ ] Remove registration codes
+- [ ] Add group chats
+- [ ] Add realtime private chats
