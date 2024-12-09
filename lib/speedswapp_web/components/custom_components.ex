@@ -4,6 +4,7 @@ defmodule SpeedswappWeb.CustomComponents do
   use Phoenix.Component
 
   slot :inner_block, required: true
+
   def container(assigns) do
     ~H"""
     <div class="mx-auto max-w-full px-4 py-4 bg-zinc-800 rounded-lg mb-32 mt-8">
@@ -13,6 +14,7 @@ defmodule SpeedswappWeb.CustomComponents do
   end
 
   slot :inner_block, required: true
+
   def group_container(assigns) do
     ~H"""
     <div class="mx-auto max-w-full px-4 py-4 bg-zinc-800 rounded-lg mt-8">
@@ -23,17 +25,20 @@ defmodule SpeedswappWeb.CustomComponents do
 
   def adsense(assigns) do
     ~H"""
-    <ins class="adsbygoogle"
+    <ins
+      class="adsbygoogle"
       style="display:block; text-align:center;"
       data-ad-layout="in-article"
       data-ad-format="fluid"
       data-ad-client="ca-pub-7783256035891270"
-      data-ad-slot="6331846695">
+      data-ad-slot="6331846695"
+    >
     </ins>
     """
   end
 
   slot :inner_block, required: true
+
   def container_header(assigns) do
     ~H"""
     <h5 class="text-xl font-semibold tracking-tight text-gray-100">
@@ -85,33 +90,35 @@ defmodule SpeedswappWeb.CustomComponents do
   def feed(assigns) do
     ~H"""
     <div class="mb-20 max-w-full">
-      <div
-        :for={{dom_id, post} <- @posts}
-        id={dom_id}
-        class="width-100 bg-zinc-800 text-black m-h-64 border-b-1 border-zinc-800 mb-5 mt-5 p-4 rounded-lg"
-      >
-        <div class="flex items-center gap-4 mb-2">
-          <img
-            class="w-10 h-10 rounded-lg object-cover"
-            src={post.user.avatar_path}
-          />
-          <div class="font-medium text-white">
-            <div><%= post.user.handle || "Unhandled" %></div>
-            <div class="text-sm text-zinc-300 dark:text-gray-400">
-              Posted in <.link href={"/group/" <> to_string(post.group.id)}><span class="text-blue-400 font-bold"><%= post.group.name %></span></.link>
+      <div id="load-more" phx-update="stream" phx-viewport-bottom="load-more">
+        <div
+          :for={{dom_id, post} <- @posts}
+          id={dom_id}
+          class="width-100 bg-zinc-800 text-black m-h-64 border-b-1 border-zinc-800 mb-5 mt-5 p-4 rounded-lg"
+        >
+          <div class="flex items-center gap-4 mb-2">
+            <img class="w-10 h-10 rounded-lg object-cover" src={post.user.avatar_path} />
+            <div class="font-medium text-white">
+              <div><%= post.user.handle || "Unhandled" %></div>
+              <div class="text-sm text-zinc-300 dark:text-gray-400">
+                Posted in
+                <.link href={"/group/" <> to_string(post.group.id)}>
+                  <span class="text-blue-400 font-bold"><%= post.group.name %></span>
+                </.link>
+              </div>
             </div>
           </div>
+          <%= if post.image_path do %>
+            <img class="rounded-lg w-full" src={post.image_path} />
+          <% end %>
+          <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
+            <%= post.caption %>
+          </h5>
+          <p class="text-slate-200 text-sm">
+            <%= post.description %>
+          </p>
+          <div class="bg-zinc-700"></div>
         </div>
-        <%= if post.image_path do %>
-          <img class="rounded-lg w-full" src={post.image_path} />
-        <% end %>
-        <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
-          <%= post.caption %>
-        </h5>
-        <p class="text-slate-200 text-sm">
-          <%= post.description %>
-        </p>
-        <div class="bg-zinc-700"></div>
       </div>
     </div>
     """

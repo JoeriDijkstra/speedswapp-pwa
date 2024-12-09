@@ -30,15 +30,15 @@ defmodule Speedswapp.Groups do
 
     query =
       from g in Group,
-      where: like(g.search, ^search),
-      order_by: [asc: :name],
-      limit: 5
+        where: like(g.search, ^search),
+        order_by: [asc: :name],
+        limit: 5
 
     Repo.all(query)
   end
 
   def is_subscribed?(group_id, %User{id: user_id}) do
-    Repo.get_by(GroupMembership, [group_id: group_id, user_id: user_id])
+    Repo.get_by(GroupMembership, group_id: group_id, user_id: user_id)
   end
 
   def subscribe(group_id, %User{id: user_id}, promoted \\ false) do

@@ -39,23 +39,24 @@ defmodule SpeedswappWeb.GroupsLive do
 
     <.container>
       <.container_header>Your groups</.container_header>
-      <p class="text-zinc-400 text-sm mb-4">Hi <%= assigns.current_user.handle || "there" %> &#128075;, here you can manage your groups</p>
+      <p class="text-zinc-400 text-sm mb-4">
+        Hi <%= assigns.current_user.handle || "there" %> &#128075;, here you can manage your groups
+      </p>
       <.button phx-click={show_modal("create-group-modal")}>Create a new group</.button>
       <div class="mt-8 mb-8 rounded-lg">
         <div :for={{dom_id, group} <- @streams.groups} id={dom_id}>
           <div class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2">
-            <img
-              class="w-10 h-10 rounded-lg mr-4 object-cover"
-              src={group.image_path}
-            />
-            <.link
-              type="button"
-              href={"group/" <> to_string(group.id)}
-              class="grow h-full"
-            >
-            <span ><%= group.name %></span>
+            <img class="w-10 h-10 rounded-lg mr-4 object-cover" src={group.image_path} />
+            <.link type="button" href={"group/" <> to_string(group.id)} class="grow h-full">
+              <span><%= group.name %></span>
             </.link>
-            <a class="text-blue-400 font-bold text-s" phx-click="unsubscribe" phx-value-group={group.id}>Unsubscribe</a>
+            <a
+              class="text-blue-400 font-bold text-s"
+              phx-click="unsubscribe"
+              phx-value-group={group.id}
+            >
+              Unsubscribe
+            </a>
           </div>
         </div>
       </div>
@@ -96,7 +97,11 @@ defmodule SpeedswappWeb.GroupsLive do
     {:noreply, assign(socket, form: form)}
   end
 
-  def handle_event("create_group", %{"group" => group_params}, %{assigns: %{current_user: current_user}} = socket) do
+  def handle_event(
+        "create_group",
+        %{"group" => group_params},
+        %{assigns: %{current_user: current_user}} = socket
+      ) do
     group_params
     |> Map.put("image_path", List.first(consume_files(socket)))
     |> Groups.save(current_user)
@@ -114,8 +119,13 @@ defmodule SpeedswappWeb.GroupsLive do
     end
   end
 
-  def handle_event("unsubscribe", %{"group" => group_id}, %{assigns: %{current_user: current_user}} = socket) do
+  def handle_event(
+        "unsubscribe",
+        %{"group" => group_id},
+        %{assigns: %{current_user: current_user}} = socket
+      ) do
     {parsed_group_id, _} = Integer.parse(group_id)
+
     case Groups.unsubscribe(parsed_group_id, current_user) do
       {:ok, _} ->
         socket =

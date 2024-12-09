@@ -2,7 +2,14 @@ defmodule Speedswapp.Vehicles.Vehicle do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @permitted_fields [:name, :description, :horsepower, :body_type, :vehicle_type_id, :vehicle_fuel_id]
+  @permitted_fields [
+    :name,
+    :description,
+    :horsepower,
+    :body_type,
+    :vehicle_type_id,
+    :vehicle_fuel_id
+  ]
   @required_fields [:name, :description, :vehicle_type_id]
 
   schema "vehicles" do
