@@ -1,29 +1,36 @@
-# fly.toml app configuration file generated for speedswapp on 2023-07-24T21:13:38+02:00
+# fly.toml app configuration file generated for speedswapp on 2024-12-07T12:35:16+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "speedswapp"
-primary_region = "ams"
-kill_signal = "SIGTERM"
+app = 'speedswapp'
+primary_region = 'ams'
+kill_signal = 'SIGTERM'
 swap_size_mb = 512
 
+[build]
+
 [deploy]
-  release_command = "/app/bin/migrate"
+  release_command = '/app/bin/migrate'
 
 [env]
-  PHX_HOST = "speedswapp.fly.dev"
-  PORT = "8080"
+  PHX_HOST = 'speedswapp.fly.dev'
+  PORT = '8080'
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
+  processes = ['app']
+
   [http_service.concurrency]
-    type = "connections"
+    type = 'connections'
     hard_limit = 1000
     soft_limit = 1000
 
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
