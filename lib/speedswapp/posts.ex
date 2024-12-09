@@ -6,7 +6,9 @@ defmodule Speedswapp.Posts do
   alias Speedswapp.Repo
   alias Speedswapp.Posts.Post
 
-  def list(%{assigns: %{current_user: user}}) do
+  def list(%{assigns: %{current_user: user}}, page \\ 1, per_page \\ 5) do
+    offset = (page - 1) * per_page
+
     user_memberships =
       user
       |> Repo.preload(:group_memberships)
@@ -18,7 +20,9 @@ defmodule Speedswapp.Posts do
         select: p,
         where: p.group_id in ^user_memberships,
         order_by: [desc: :inserted_at],
-        preload: [:user, :group]
+        preload: [:user, :group],
+        limit: ^per_page,
+        offset: ^offset
 
     Repo.all(query)
   end
