@@ -89,8 +89,8 @@ defmodule SpeedswappWeb.CustomComponents do
 
   def feed(assigns) do
     ~H"""
-    <div class="mb-20 max-w-full">
-      <div id="load-more" phx-update="stream" phx-viewport-bottom="load-more">
+    <div class="mb-24 max-w-full">
+      <div class="mb-10" id="load-more" phx-update="stream" phx-viewport-bottom="load-more">
         <div
           :for={{dom_id, post} <- @posts}
           id={dom_id}
@@ -118,6 +118,12 @@ defmodule SpeedswappWeb.CustomComponents do
             <%= post.description %>
           </p>
           <div class="bg-zinc-700"></div>
+        </div>
+      </div>
+      <div class=" text-gray-300 pt-4 text-center mb-20">
+        <p>End of the road</p>
+        <div class="animate-pulse text-blue-400 font-bold">
+          <.link href="/search">Explore</.link>
         </div>
       </div>
     </div>

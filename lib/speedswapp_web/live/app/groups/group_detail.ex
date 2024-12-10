@@ -5,6 +5,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
   alias Speedswapp.Groups
   alias Speedswapp.Posts
 
+  @impl true
   def render(%{loading: true} = assigns) do
     ~H"""
     Loading...
@@ -41,6 +42,18 @@ defmodule SpeedswappWeb.GroupDetailLive do
     """
   end
 
+  @impl true
+  def handle_event("load-more", _, %{assigns: %{page: page, group: group}} = socket) do
+    if connected?(socket) do
+      socket =
+        socket
+        |> assign(page: page + 1)
+        |> stream_insert_many(:posts, Posts.list_for_group(group, page + 1))
+
+      {:noreply, socket}
+    end
+  end
+
   def handle_event(
         "unsubscribe",
         %{"group" => group_id},
@@ -58,7 +71,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
         {:noreply, socket}
 
       {:error, :not_found_error} ->
-        {:noreply, put_flash(socket, :error, "You are not subscribed to the group")}
+        {:noreply, put_flash(socket, :error, "Something went wrong")}
     end
   end
 
@@ -83,6 +96,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
     end
   end
 
+  @impl true
   def mount(%{"group_id" => group_id}, _, socket) do
     if connected?(socket) do
       case Groups.get(group_id) do
@@ -108,10 +122,17 @@ defmodule SpeedswappWeb.GroupDetailLive do
       |> assign(
         loading: false,
         group: group,
+        page: 1,
         subscribed?: Groups.is_subscribed?(group.id, socket.assigns.current_user)
       )
       |> stream(:posts, Posts.list_for_group(group))
 
     {:ok, socket}
+  end
+
+  defp stream_insert_many(socket, key, array) do
+    Enum.reduce(array, socket, fn a, socket ->
+      stream_insert(socket, key, a)
+    end)
   end
 end
