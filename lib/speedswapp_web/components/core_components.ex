@@ -113,7 +113,7 @@ defmodule SpeedswappWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
+        "fixed top-0 left-0 w-full sm:w-96 z-50 rounded-lg p-3 ring-1",
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
@@ -145,7 +145,7 @@ defmodule SpeedswappWeb.CoreComponents do
     ~H"""
     <.flash kind={:info} title="Success!" flash={@flash} />
     <.flash kind={:error} title="Error!" flash={@flash} />
-    <.flash
+    <%!-- <.flash
       id="client-error"
       kind={:error}
       title="We can't find the internet"
@@ -154,7 +154,7 @@ defmodule SpeedswappWeb.CoreComponents do
       hidden
     >
       Attempting to reconnect <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
-    </.flash>
+    </.flash> --%>
 
     <.flash
       id="server-error"

@@ -27,13 +27,17 @@ defmodule Speedswapp.Posts do
     Repo.all(query)
   end
 
-  def list_for_group(%{id: group_id}) do
+  def list_for_group(%{id: group_id}, page \\ 1, per_page \\ 5) do
+    offset = (page - 1) * per_page
+
     query =
       from p in Post,
         select: p,
         order_by: [desc: :inserted_at],
         preload: [:user, :group],
-        where: p.group_id == ^group_id
+        where: p.group_id == ^group_id,
+        limit: ^per_page,
+        offset: ^offset
 
     Repo.all(query)
   end

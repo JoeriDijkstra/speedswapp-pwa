@@ -6,18 +6,19 @@ defmodule SpeedswappWeb.SearchLive do
   @impl true
   def render(%{loading: true} = assigns) do
     ~H"""
-    <h1 class="text-2xl">Loading Speedswapp</h1>
+    <h1 class="text-gray-300 text-center animate-pulse text-2xl">Loading Speedswapp</h1>
     """
   end
 
   def render(assigns) do
     ~H"""
     <.group_container>
+      <.container_header>Explore</.container_header>
       <form phx-change="search" phx-submit="search">
         <.input
           type="text"
           name="search"
-          placeholder="Explore the platform..."
+          placeholder="Search for anything"
           value=""
           phx-debounce="200"
         />
@@ -36,16 +37,22 @@ defmodule SpeedswappWeb.SearchLive do
         </div>
       <% end %>
     </.group_container>
-    <.group_container>
-      <.container_header>Events</.container_header>
-    </.group_container>
-    <.group_container>
-      <.container_header>Ads</.container_header>
-      <.adsense />
-    </.group_container>
-    <.group_container>
-      <.container_header>Recommended</.container_header>
-    </.group_container>
+    <%= if Enum.count(@streams.groups) == 0 do %>
+      <.group_container>
+        <.container_header>Recommended</.container_header>
+        <div :for={{dom_id, group} <- @streams.recommended} id={dom_id}>
+          <div class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2">
+            <img class="w-10 h-10 rounded-lg mr-4 object-cover" src={group.image_path} />
+            <.link type="button" href={"group/" <> to_string(group.id)} class="grow h-full">
+              <span><%= group.name %></span>
+            </.link>
+          </div>
+        </div>
+      </.group_container>
+      <.group_container>
+        <.container_header>Events</.container_header>
+      </.group_container>
+    <% end %>
     """
   end
 
@@ -56,6 +63,7 @@ defmodule SpeedswappWeb.SearchLive do
         socket
         |> assign(loading: false)
         |> stream(:groups, [])
+        |> stream(:recommended, Groups.recommended())
 
       {:ok, socket}
     else

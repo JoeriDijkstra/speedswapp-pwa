@@ -37,6 +37,15 @@ defmodule Speedswapp.Groups do
     Repo.all(query)
   end
 
+  def recommended() do
+    query =
+      from g in Group,
+        order_by: fragment("RANDOM()"),
+        limit: 5
+
+    Repo.all(query)
+  end
+
   def is_subscribed?(group_id, %User{id: user_id}) do
     Repo.get_by(GroupMembership, group_id: group_id, user_id: user_id)
   end
