@@ -38,7 +38,7 @@ defmodule SpeedswappWeb.GroupDetailLive do
         </div>
       </div>
     </.group_container>
-    <.feed posts={@streams.posts} />
+    <.feed posts={@streams.posts} current_user={assigns.current_user} />
     """
   end
 

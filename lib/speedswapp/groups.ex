@@ -41,7 +41,7 @@ defmodule Speedswapp.Groups do
     query =
       from g in Group,
         order_by: fragment("RANDOM()"),
-        limit: 5
+        limit: 3
 
     Repo.all(query)
   end

@@ -1,5 +1,8 @@
 defmodule Speedswapp.Accounts.User do
   alias Speedswapp.Groups.GroupMembership
+  alias Speedswapp.Posts.Post
+  alias Speedswapp.Posts.UserPostLikes
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -12,6 +15,8 @@ defmodule Speedswapp.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     has_many :group_memberships, GroupMembership
+
+    many_to_many :liked_posts, Post, join_through: UserPostLikes
 
     timestamps()
   end

@@ -5,6 +5,7 @@ defmodule Speedswapp.Posts.Post do
 
   alias Speedswapp.Groups.Group
   alias Speedswapp.Accounts.User
+  alias Speedswapp.Posts.UserPostLikes
 
   schema "posts" do
     field :caption, :string
@@ -13,6 +14,8 @@ defmodule Speedswapp.Posts.Post do
 
     belongs_to :user, User
     belongs_to :group, Group
+
+    many_to_many :likes, User, join_through: UserPostLikes
 
     timestamps()
   end

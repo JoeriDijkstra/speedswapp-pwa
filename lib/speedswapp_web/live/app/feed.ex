@@ -13,7 +13,7 @@ defmodule SpeedswappWeb.FeedLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.feed posts={@streams.posts} />
+    <.feed posts={@streams.posts} current_user={assigns.current_user} />
     """
   end
 
@@ -41,6 +41,18 @@ defmodule SpeedswappWeb.FeedLive do
         |> stream_insert_many(:posts, Posts.list(socket, page + 1))
 
       {:noreply, socket}
+    end
+  end
+
+  def handle_event("toggle-like", %{"id" => post_id}, %{assigns: %{current_user: user}} = socket) do
+    if connected?(socket) do
+      case Posts.like(post_id, user) do
+        {:ok, post} ->
+          {:noreply, stream_insert(socket, :posts, post, at: -1)}
+
+        _ ->
+          {:noreply, put_flash(socket, :error, "Liking post failed")}
+      end
     end
   end
 

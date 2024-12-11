@@ -86,6 +86,7 @@ defmodule SpeedswappWeb.CustomComponents do
   end
 
   attr :posts, :list, required: true
+  attr :current_user, :map, required: true
 
   def feed(assigns) do
     ~H"""
@@ -111,13 +112,30 @@ defmodule SpeedswappWeb.CustomComponents do
           <%= if post.image_path do %>
             <img class="rounded-lg w-full" src={post.image_path} />
           <% end %>
-          <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
-            <%= post.caption %>
-          </h5>
-          <p class="text-slate-200 text-sm">
-            <%= post.description %>
-          </p>
-          <div class="bg-zinc-700"></div>
+          <div class="flex flex-row">
+            <div class="flex-auto">
+              <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
+                <%= post.caption %>
+              </h5>
+              <p class="text-slate-200 text-sm">
+                <%= post.description %>
+              </p>
+            </div>
+            <div class="flex-initial">
+              <div class="flex justify-between items-center mt-4">
+                <span phx-click="toggle-like" phx-value-id={post.id}>
+                  <%= if Enum.find(post.likes, & &1.id == @current_user.id) do %>
+                    <span class="ml-2 hero-fire-solid text-orange-500 h-8 w-8 transition duration-500 ease-in-out hover:scale-110" />
+                  <% else %>
+                    <span class="ml-2 hero-fire text-gray-100 h-8 w-8 transition duration-500 ease-in-out hover:scale-110" />
+                  <% end %>
+                </span>
+                <span class="ml-2 text-gray-100 text-lg"><%= Enum.count(post.likes) %></span>
+                <span class="ml-4 hero-chat-bubble-left text-gray-100 h-8 w-8" />
+                <span class="ml-2 text-gray-100 text-lg">0</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class=" text-gray-300 pt-4 text-center mb-20">

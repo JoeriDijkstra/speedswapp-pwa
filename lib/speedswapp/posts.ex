@@ -5,6 +5,7 @@ defmodule Speedswapp.Posts do
 
   alias Speedswapp.Repo
   alias Speedswapp.Posts.Post
+  alias Speedswapp.Posts.UserPostLikes
 
   def list(%{assigns: %{current_user: user}}, page \\ 1, per_page \\ 5) do
     offset = (page - 1) * per_page
@@ -20,7 +21,7 @@ defmodule Speedswapp.Posts do
         select: p,
         where: p.group_id in ^user_memberships,
         order_by: [desc: :inserted_at],
-        preload: [:user, :group],
+        preload: [:user, :group, :likes],
         limit: ^per_page,
         offset: ^offset
 
@@ -40,6 +41,43 @@ defmodule Speedswapp.Posts do
         offset: ^offset
 
     Repo.all(query)
+  end
+
+  def like(post_id, user) do
+    like = Repo.get_by(UserPostLikes, user_id: user.id, post_id: post_id)
+
+    case toggle_like(like, post_id, user) do
+      {:ok, _} ->
+        fetch_post(post_id)
+
+      error ->
+        error
+        |> IO.inspect(label: "Return")
+    end
+  end
+
+  defp toggle_like(like, post_id, user) do
+    if like do
+      Repo.delete(like)
+    else
+      %{post_id: post_id, user_id: user.id}
+      |> UserPostLikes.changeset()
+      |> Repo.insert()
+    end
+  end
+
+  defp fetch_post(post_id) do
+    query =
+      from p in Post,
+        where: p.id == ^post_id,
+        preload: [:user, :group, :likes]
+
+    query
+    |> Repo.one()
+    |> case do
+      %Post{} = post -> {:ok, post}
+      error -> error
+    end
   end
 
   def save(params) do
