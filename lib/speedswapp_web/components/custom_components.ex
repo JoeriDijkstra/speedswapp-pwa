@@ -3,6 +3,8 @@ defmodule SpeedswappWeb.CustomComponents do
 
   use Phoenix.Component
 
+  import SpeedswappWeb.CoreComponents
+
   slot :inner_block, required: true
 
   def container(assigns) do
@@ -87,9 +89,44 @@ defmodule SpeedswappWeb.CustomComponents do
 
   attr :posts, :list, required: true
   attr :current_user, :map, required: true
+  attr :comments, :list, required: false
+  attr :selected_post, :map, required: false
 
   def feed(assigns) do
     ~H"""
+    <%= if(assigns.selected_post != nil) do %>
+      <div class="w-full bottom-0 left-0 right-0 h-2/3 fixed p-6 text-white bg-zinc-900 flex z-50 transition duration-200 ease-in-out rounded-lg">
+        <div class="flex items-center h-8">
+          <div class="flex-auto">
+            <span phx-click="close-comments" class="hero-x-mark text-gray-100 h-6 w-6" />
+          </div>
+          <div class="flex-auto">
+            <h2 class="ml-6 text-xl font-bold text-zinc-100"><%= assigns.selected_post.caption %></h2>
+          </div>
+        </div>
+        <div
+          :for={{dom_id, comment} <- @comments}
+          id={dom_id}
+          class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
+        >
+          <img class="w-10 h-10 rounded-lg mr-4 object-cover" src={comment.user.avatar} />
+          <div class="text-sm text-zinc-300 dark:text-gray-400">
+            <div>
+              <.link href={"/profile/" <> to_string(comment.user.handle)}>
+                <span class="text-blue-400 font-bold"><%= comment.user.handle %></span>
+              </.link>
+              <span class="text-grey-100">
+                <%= comment.body %>
+              </span>
+            </div>
+          </div>
+          <div class="bottom-0 w-full h-16 bg-zinc-800">
+            Type your comment
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="mb-24 max-w-full">
       <div class="mb-10" id="load-more" phx-update="stream" phx-viewport-bottom="load-more">
         <div
@@ -112,30 +149,28 @@ defmodule SpeedswappWeb.CustomComponents do
           <%= if post.image_path do %>
             <img class="rounded-lg w-full" src={post.image_path} />
           <% end %>
-          <div class="flex flex-row">
-            <div class="flex-auto">
-              <h5 class="text-xl font-semibold tracking-tight text-gray-100 pt-4">
-                <%= post.caption %>
-              </h5>
-              <p class="text-slate-200 text-sm">
-                <%= post.description %>
-              </p>
-            </div>
-            <div class="flex-initial">
-              <div class="flex justify-between items-center mt-4">
-                <span phx-click="toggle-like" phx-value-id={post.id}>
-                  <%= if Enum.find(post.likes, & &1.id == @current_user.id) do %>
-                    <span class="ml-2 hero-fire-solid text-orange-500 h-8 w-8 transition duration-500 ease-in-out hover:scale-110" />
-                  <% else %>
-                    <span class="ml-2 hero-fire text-gray-100 h-8 w-8 transition duration-500 ease-in-out hover:scale-110" />
-                  <% end %>
-                </span>
-                <span class="ml-2 text-gray-100 text-lg"><%= Enum.count(post.likes) %></span>
-                <span class="ml-4 hero-chat-bubble-left text-gray-100 h-8 w-8" />
-                <span class="ml-2 text-gray-100 text-lg">0</span>
-              </div>
-            </div>
+          <div class="flex items-center mt-4">
+            <span phx-click="toggle-like" phx-value-id={post.id}>
+              <%= if Enum.find(post.likes, & &1.id == @current_user.id) do %>
+                <span class="hero-fire-solid text-orange-500 h-6 w-6 transition duration-500 ease-in-out hover:scale-110" />
+              <% else %>
+                <span class="hero-fire text-gray-100 h-6 w-6 transition duration-500 ease-in-out hover:scale-110 z-50" />
+              <% end %>
+            </span>
+            <span class="ml-2 text-gray-100"><%= Enum.count(post.likes) %></span>
+            <span
+              phx-click="open-comments"
+              phx-value-id={post.id}
+              class="ml-4 hero-chat-bubble-left text-gray-100 h-6 w-6"
+            />
+            <span class="ml-2 text-gray-100">0</span>
           </div>
+          <h5 class="text-lg font-semibold tracking-tight text-gray-100 pt-4">
+            <%= post.caption %>
+          </h5>
+          <p class="text-slate-200 text-sm">
+            <%= post.description %>
+          </p>
         </div>
       </div>
       <div class=" text-gray-300 pt-4 text-center mb-20">

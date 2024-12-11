@@ -15,6 +15,7 @@ defmodule Speedswapp.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     has_many :group_memberships, GroupMembership
+    has_many :comments, Comment
 
     many_to_many :liked_posts, Post, join_through: UserPostLikes
 

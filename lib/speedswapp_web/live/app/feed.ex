@@ -13,7 +13,12 @@ defmodule SpeedswappWeb.FeedLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.feed posts={@streams.posts} current_user={assigns.current_user} />
+    <.feed
+      posts={@streams.posts}
+      current_user={assigns.current_user}
+      comments={@streams.comments}
+      selected_post={assigns.selected_post}
+    />
     """
   end
 
@@ -22,9 +27,10 @@ defmodule SpeedswappWeb.FeedLive do
     if connected?(socket) do
       socket =
         socket
-        |> assign(loading: false)
+        |> assign(loading: false, selected_post: nil)
         |> assign(page: 1)
         |> stream(:posts, Posts.list(socket, 1))
+        |> stream(:comments, [])
 
       {:ok, socket}
     else
@@ -54,6 +60,29 @@ defmodule SpeedswappWeb.FeedLive do
           {:noreply, put_flash(socket, :error, "Liking post failed")}
       end
     end
+  end
+
+  def handle_event("open-comments", %{"id" => post_id}, socket) do
+    selected_post =
+      case Posts.fetch_post(post_id) do
+        {:ok, post} -> post
+        _ -> nil
+      end
+
+    socket =
+      socket
+      |> stream(:comments, Posts.fetch_comments(post_id))
+      |> assign(selected_post: selected_post)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("close-comments", _, socket) do
+    socket =
+      socket
+      |> assign(selected_post: nil)
+
+    {:noreply, socket}
   end
 
   defp stream_insert_many(socket, key, array) do

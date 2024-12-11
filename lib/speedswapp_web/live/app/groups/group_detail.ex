@@ -96,6 +96,18 @@ defmodule SpeedswappWeb.GroupDetailLive do
     end
   end
 
+  def handle_event("toggle-like", %{"id" => post_id}, %{assigns: %{current_user: user}} = socket) do
+    if connected?(socket) do
+      case Posts.like(post_id, user) do
+        {:ok, post} ->
+          {:noreply, stream_insert(socket, :posts, post, at: -1)}
+
+        _ ->
+          {:noreply, put_flash(socket, :error, "Liking post failed")}
+      end
+    end
+  end
+
   @impl true
   def mount(%{"group_id" => group_id}, _, socket) do
     if connected?(socket) do

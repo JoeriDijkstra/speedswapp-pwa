@@ -6,6 +6,7 @@ defmodule Speedswapp.Posts do
   alias Speedswapp.Repo
   alias Speedswapp.Posts.Post
   alias Speedswapp.Posts.UserPostLikes
+  alias Speedswapp.Posts.Comment
 
   def list(%{assigns: %{current_user: user}}, page \\ 1, per_page \\ 5) do
     offset = (page - 1) * per_page
@@ -35,7 +36,7 @@ defmodule Speedswapp.Posts do
       from p in Post,
         select: p,
         order_by: [desc: :inserted_at],
-        preload: [:user, :group],
+        preload: [:user, :group, :likes],
         where: p.group_id == ^group_id,
         limit: ^per_page,
         offset: ^offset
@@ -52,7 +53,6 @@ defmodule Speedswapp.Posts do
 
       error ->
         error
-        |> IO.inspect(label: "Return")
     end
   end
 
@@ -66,11 +66,17 @@ defmodule Speedswapp.Posts do
     end
   end
 
-  defp fetch_post(post_id) do
+  def fetch_comments(post_id) do
+    post_id
+    |> Comment.for_post()
+    |> Repo.all()
+  end
+
+  def fetch_post(post_id, preload \\ [:user, :group, :likes]) do
     query =
       from p in Post,
         where: p.id == ^post_id,
-        preload: [:user, :group, :likes]
+        preload: ^preload
 
     query
     |> Repo.one()

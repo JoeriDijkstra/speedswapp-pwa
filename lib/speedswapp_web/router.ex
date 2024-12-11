@@ -63,6 +63,7 @@ defmodule SpeedswappWeb.Router do
 
       # Posts
       live "/", FeedLive, :index
+      live "/post/:post_id", PostDetailLive, :index
       live "/new", NewPostLive, :index
 
       # Groups
