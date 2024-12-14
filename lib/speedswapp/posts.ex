@@ -8,7 +8,7 @@ defmodule Speedswapp.Posts do
   alias Speedswapp.Posts.UserPostLikes
   alias Speedswapp.Posts.Comment
 
-  def list(%{assigns: %{current_user: user}}, page \\ 1, per_page \\ 5) do
+  def list(%{assigns: %{current_user: user}}, page \\ 1, per_page \\ 10) do
     offset = (page - 1) * per_page
 
     user_memberships =

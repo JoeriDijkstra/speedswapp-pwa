@@ -91,38 +91,60 @@ defmodule SpeedswappWeb.CustomComponents do
   attr :current_user, :map, required: true
   attr :comments, :list, required: false
   attr :selected_post, :map, required: false
+  attr :form, :any, required: true
 
   def feed(assigns) do
     ~H"""
     <%= if(assigns.selected_post != nil) do %>
-      <div class="w-full bottom-0 left-0 right-0 h-2/3 fixed p-6 text-white bg-zinc-900 flex z-50 transition duration-200 ease-in-out rounded-lg">
+      <div class="w-full h-4/5 bottom-0 left-0 right-0 fixed p-6 text-white bg-zinc-900 flex flex-col z-50 rounded-lg">
+        <!-- Header Section -->
         <div class="flex items-center h-8">
-          <div class="flex-auto">
+          <div class="flex-initial">
             <span phx-click="close-comments" class="hero-x-mark text-gray-100 h-6 w-6" />
           </div>
           <div class="flex-auto">
-            <h2 class="ml-6 text-xl font-bold text-zinc-100"><%= assigns.selected_post.caption %></h2>
+            <h2 class="ml-4 text-lg font-bold text-zinc-100"><%= assigns.selected_post.caption %></h2>
           </div>
         </div>
-        <div
-          :for={{dom_id, comment} <- @comments}
-          id={dom_id}
-          class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
-        >
-          <img class="w-10 h-10 rounded-lg mr-4 object-cover" src={comment.user.avatar} />
-          <div class="text-sm text-zinc-300 dark:text-gray-400">
-            <div>
-              <.link href={"/profile/" <> to_string(comment.user.handle)}>
-                <span class="text-blue-400 font-bold"><%= comment.user.handle %></span>
-              </.link>
-              <span class="text-grey-100">
-                <%= comment.body %>
-              </span>
+        <!-- Comments Section -->
+        <div class="flex-1 overflow-y-auto mt-4 mb-12">
+          <div
+            :for={{dom_id, comment} <- @comments}
+            id={dom_id}
+            class="inline-flex items-center w-full px-4 py-4 font-bold text-zinc-100 bg-zinc-700 rounded-lg mb-2"
+          >
+            <div class="text-sm text-zinc-300 dark:text-gray-400">
+              <div>
+                <.link href={"/profile/" <> to_string(comment.user.handle)}>
+                  <span class="text-blue-400 font-bold"><%= comment.user.handle %> </span>
+                </.link>
+                <span class="text-grey-100">
+                  <%= comment.body %>
+                </span>
+              </div>
             </div>
           </div>
-          <div class="bottom-0 w-full h-16 bg-zinc-800">
-            Type your comment
-          </div>
+        </div>
+
+        <div class="w-full h-20 px-4 py-4 absolute bottom-0 left-0 flex items-center">
+            <.form
+                for={@form}
+                phx-submit="submit-comment"
+                phx-change="validate-comment"
+                class="relative w-full"
+            >
+                <div class="relative w-full">
+                    <.input field={@form[:body]} required />
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        class="absolute top-0 right-0 text-blue-400 text-sm mt-3 mr-3 font-bold"
+                    >
+                      Comment
+                    </button>
+                </div>
+            </.form>
         </div>
       </div>
     <% end %>

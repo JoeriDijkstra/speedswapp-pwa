@@ -24,6 +24,8 @@ defmodule Speedswapp.Posts.Comment do
 
   def for_post(post_id) do
     from c in __MODULE__,
-      where: c.post_id == ^post_id
+      where: c.post_id == ^post_id,
+      preload: :user,
+      order_by: [desc: c.id]
   end
 end
