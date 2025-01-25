@@ -44,8 +44,8 @@ if config_env() == :prod do
     secret_key_base: secret_key_base
 
   config :speedswapp, Speedswapp.Mailer,
-    adapter: Swoosh.Adapters.Mandrill,
-    api_key: System.get_env("MANDRILL_API_KEY")
+    adapter: Swoosh.Adapters.Sendgrid,
+    api_key: System.get_env("SENDGRID_API_KEY")
 end
 
 config :ex_aws,

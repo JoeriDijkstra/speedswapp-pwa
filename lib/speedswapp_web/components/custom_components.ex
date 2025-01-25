@@ -126,20 +126,20 @@ defmodule SpeedswappWeb.CustomComponents do
           </div>
         </div>
 
-        <div class="w-full h-20 px-4 py-4 absolute bottom-0 left-0 flex items-center">
+        <div class="w-full flex items-center rounded-lg h-20 px-4 py-4 absolute bottom-0 left-0 flex items-center">
             <.form
                 for={@form}
                 phx-submit="submit-comment"
                 phx-change="validate-comment"
                 class="relative w-full"
             >
-                <div class="relative w-full">
+                <div class="relative w-full mb-4">
                     <.input field={@form[:body]} required />
 
                     <!-- Submit Button -->
                     <button
                         type="submit"
-                        class="absolute top-0 right-0 text-blue-400 text-sm mt-3 mr-3 font-bold"
+                        class="absolute right-0 text-blue-400 text-sm mr-3 mt-3 font-bold top-0"
                     >
                       Comment
                     </button>
@@ -185,7 +185,7 @@ defmodule SpeedswappWeb.CustomComponents do
               phx-value-id={post.id}
               class="ml-4 hero-chat-bubble-left text-gray-100 h-6 w-6"
             />
-            <span class="ml-2 text-gray-100">0</span>
+            <span class="ml-2 text-gray-100"><%= Enum.count(post.comments) %></span>
           </div>
           <h5 class="text-lg font-semibold tracking-tight text-gray-100 pt-4">
             <%= post.caption %>

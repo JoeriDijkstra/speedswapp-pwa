@@ -22,7 +22,7 @@ defmodule Speedswapp.Posts do
         select: p,
         where: p.group_id in ^user_memberships,
         order_by: [desc: :inserted_at],
-        preload: [:user, :group, :likes],
+        preload: [:user, :group, :likes, :comments],
         limit: ^per_page,
         offset: ^offset
 
@@ -36,7 +36,7 @@ defmodule Speedswapp.Posts do
       from p in Post,
         select: p,
         order_by: [desc: :inserted_at],
-        preload: [:user, :group, :likes],
+        preload: [:user, :group, :likes, :comments],
         where: p.group_id == ^group_id,
         limit: ^per_page,
         offset: ^offset
@@ -72,7 +72,7 @@ defmodule Speedswapp.Posts do
     |> Repo.all()
   end
 
-  def fetch_post(post_id, preload \\ [:user, :group, :likes]) do
+  def fetch_post(post_id, preload \\ [:user, :group, :likes, :comments]) do
     query =
       from p in Post,
         where: p.id == ^post_id,

@@ -2,6 +2,7 @@ defmodule Speedswapp.Accounts.User do
   alias Speedswapp.Groups.GroupMembership
   alias Speedswapp.Posts.Post
   alias Speedswapp.Posts.UserPostLikes
+  alias Speedswapp.Posts.Comment
 
   use Ecto.Schema
   import Ecto.Changeset
