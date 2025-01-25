@@ -98,7 +98,7 @@ defmodule SpeedswappWeb.CustomComponents do
     <%= if(assigns.selected_post != nil) do %>
       <div class="w-full h-4/5 bottom-0 left-0 right-0 fixed p-6 text-white bg-zinc-900 flex flex-col z-50 rounded-lg">
         <!-- Header Section -->
-        <div class="flex items-center h-8">
+        <div class="flex items-center h-8 mb-4">
           <div class="flex-initial">
             <span phx-click="close-comments" class="hero-x-mark text-gray-100 h-6 w-6" />
           </div>
@@ -116,7 +116,7 @@ defmodule SpeedswappWeb.CustomComponents do
             <div class="text-sm text-zinc-300 dark:text-gray-400">
               <div>
                 <.link href={"/profile/" <> to_string(comment.user.handle)}>
-                  <span class="text-blue-400 font-bold"><%= comment.user.handle %> </span>
+                  <span class="text-blue-400 font-bold"><%= comment.user.handle %></span>
                 </.link>
                 <span class="text-grey-100">
                   <%= comment.body %>
@@ -127,24 +127,22 @@ defmodule SpeedswappWeb.CustomComponents do
         </div>
 
         <div class="w-full flex items-center rounded-lg h-20 px-4 py-4 absolute bottom-0 left-0 flex items-center">
-            <.form
-                for={@form}
-                phx-submit="submit-comment"
-                phx-change="validate-comment"
-                class="relative w-full"
-            >
-                <div class="relative w-full mb-4">
-                    <.input field={@form[:body]} required />
-
-                    <!-- Submit Button -->
-                    <button
-                        type="submit"
-                        class="absolute right-0 text-blue-400 text-sm mr-3 mt-3 font-bold top-0"
-                    >
-                      Comment
-                    </button>
-                </div>
-            </.form>
+          <.form
+            for={@form}
+            phx-submit="submit-comment"
+            phx-change="validate-comment"
+            class="relative w-full"
+          >
+            <div class="relative w-full mb-8">
+              <.input field={@form[:body]} required class="w-full pr-20" />
+              <button
+                type="submit"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 text-sm font-bold"
+              >
+                Comment
+              </button>
+            </div>
+          </.form>
         </div>
       </div>
     <% end %>
